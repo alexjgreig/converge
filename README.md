@@ -1,2 +1,2 @@
-# Unison
-Unison sophisticatedly shares computational load across website vistors to achieve a common goal. Utiling WebAssembly and the Rust Programming Language, Unison efficiently shares computational load of cryptocurrency mining.
+# Converge
+Converge sophisticatedly displays the global economy using data-driven machine learning. Provides a macroeconomic view of the economy using sentiment analysis of market news and utilises statistical methods to devise a arbitrary value of economic potential for each country.
