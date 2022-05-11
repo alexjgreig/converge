@@ -1,3 +1,15 @@
+use std::env;
+
+mod blocks;
+
 fn main() {
-    println!("Hello, world!");
+    let args: Vec<String> = env::args().collect();
+
+    if &args[1] == "node" {
+        // Run Node Module
+    } else if &args[1] == "admin" {
+        //run admin api interface
+    } else {
+        panic!("Please input a valid command!");
+    }
 }

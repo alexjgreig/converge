@@ -1,7 +1,7 @@
 1) Research how a blockchain functions and the way in which underlying assets could be exchanged for cryptocurrency that is built on top of the crypto currency. Research smart contracts as a way to automate transactions and how people use the network.
 2) Choose the consensus mechanisms and platform.
 3) Design the nodes and instances.
-4) Design the user and admin interface and APIs
+4 Design the user and admin interface and APIs
 5) Implement all the important functions: new_block, init_blockchain, new_transaction, has, register_node, valid_chain, valid_proof
 
 Block Variables: Index, Timestamp in Unix time, Transaction List, Proof, Previous Block Hash.
