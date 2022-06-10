@@ -235,6 +235,7 @@ fn mainnet_genesis(
 			// Assign network admin rights.
 			key: Some(root_key),
 		},
+		substrate_nfts: NFTConfig { nfts: vec![] },
 		transaction_payment: Default::default(),
 	}
 }

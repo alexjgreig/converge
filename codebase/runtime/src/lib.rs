@@ -93,8 +93,8 @@ pub mod opaque {
 //   https://docs.substrate.io/v3/runtime/upgrades#runtime-versioning
 #[sp_version::runtime_version]
 pub const VERSION: RuntimeVersion = RuntimeVersion {
-	spec_name: create_runtime_str!("node-template"),
-	impl_name: create_runtime_str!("node-template"),
+	spec_name: create_runtime_str!("converge"),
+	impl_name: create_runtime_str!("converge"),
 	authoring_version: 1,
 	// The version of the runtime specification. A full node will not attempt to use its native
 	//   runtime in substitute for the on-chain Wasm runtime unless all of `spec_name`,
@@ -260,10 +260,16 @@ impl pallet_sudo::Config for Runtime {
 	type Event = Event;
 	type Call = Call;
 }
-
-/// Configure the pallet-template in pallets/template.
-impl pallet_template::Config for Runtime {
+parameter_types! {
+	// The max amount of NFT that one could own, need to shift this value. A max is set so that one
+	// cannot flood the network with NFT creations.
+	pub const MaxNFTOwned: u32 = 1000;
+}
+impl pallet_nft::Config for Runtime {
 	type Event = Event;
+	type Currency = Balances;
+	type NFTRandomness = RandomnessCollectiveFlip;
+	type MaxNFTOwned = MaxNFTOwned;
 }
 
 // Create the runtime by composing the FRAME pallets that were previously configured.
@@ -282,7 +288,7 @@ construct_runtime!(
 		TransactionPayment: pallet_transaction_payment,
 		Sudo: pallet_sudo,
 		// Include the custom logic from the pallet-template in the runtime.
-		TemplateModule: pallet_template,
+		NFT: pallet_nft,
 	}
 );
 
