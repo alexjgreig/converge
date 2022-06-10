@@ -58,18 +58,18 @@ useEffect(subscribeCount, [api, keyring])
 useEffect(subscribeNFTs, [api, keyring, nftIds])
 
 return <Grid.Column width={16}>
-  <h1>Kitties</h1>
-  <KittyCards kitties={kitties} setStatus={setStatus}/>
+  <h1>NFTs</h1>
+  <NFTCards nfts={nfts} setStatus={setStatus}/>
 
 <Form style={{ margin: '1em 0' }}>
       <Form.Field style={{ textAlign: 'center' }}>
         <TxButton
-          label='Create Kitty'
+          label='Create NFT'
           type='SIGNED-TX'
           setStatus={setStatus}
           attrs={{
-            palletRpc: 'substrateKitties',
-            callable: 'createKitty',
+            palletRpc: 'substrateNFTs',
+            callable: 'createNFT',
             inputParams: [],
             paramFields: []
           }}

@@ -9,14 +9,14 @@ import {
   Label,
 } from 'semantic-ui-react'
 
-import KittyAvatar from './KittyAvatar'
+import NFTAvatar from './NFTAvatar'
 import { useSubstrateState } from './substrate-lib'
 import { TxButton } from './substrate-lib/components'
 
 // --- Transfer Modal ---
 
 const TransferModal = props => {
-  const { kitty, setStatus } = props
+  const { nft, setStatus } = props
   const [open, setOpen] = React.useState(false)
   const [formValue, setFormValue] = React.useState({})
 
@@ -40,10 +40,10 @@ const TransferModal = props => {
         </Button>
       }
     >
-      <Modal.Header>Kitty Transfer</Modal.Header>
+      <Modal.Header>NFT Transfer</Modal.Header>
       <Modal.Content>
         <Form>
-          <Form.Input fluid label="Kitty ID" readOnly value={kitty.dna} />
+          <Form.Input fluid label="NFT ID" readOnly value={nft.dna} />
           <Form.Input
             fluid
             label="Receiver"
@@ -62,9 +62,9 @@ const TransferModal = props => {
           setStatus={setStatus}
           onClick={confirmAndClose}
           attrs={{
-            palletRpc: 'substrateKitties',
+            palletRpc: 'NFT',
             callable: 'transfer',
-            inputParams: [formValue.target, kitty.dna],
+            inputParams: [formValue.target, nft.dna],
             paramFields: [true, true],
           }}
         />
@@ -76,7 +76,7 @@ const TransferModal = props => {
 // --- Set Price ---
 
 const SetPrice = props => {
-  const { kitty, setStatus } = props
+  const { nft, setStatus } = props
   const [open, setOpen] = React.useState(false)
   const [formValue, setFormValue] = React.useState({})
 
@@ -100,10 +100,10 @@ const SetPrice = props => {
         </Button>
       }
     >
-      <Modal.Header>Set Kitty Price</Modal.Header>
+      <Modal.Header>Set NFT Price</Modal.Header>
       <Modal.Content>
         <Form>
-          <Form.Input fluid label="Kitty ID" readOnly value={kitty.dna} />
+          <Form.Input fluid label="NFT ID" readOnly value={nft.dna} />
           <Form.Input
             fluid
             label="Price"
@@ -122,9 +122,9 @@ const SetPrice = props => {
           setStatus={setStatus}
           onClick={confirmAndClose}
           attrs={{
-            palletRpc: 'substrateKitties',
+            palletRpc: 'NFT',
             callable: 'setPrice',
-            inputParams: [kitty.dna, formValue.target],
+            inputParams: [nft.dna, formValue.target],
             paramFields: [true, true],
           }}
         />
@@ -133,10 +133,10 @@ const SetPrice = props => {
   )
 }
 
-// --- Buy Kitty ---
+// --- Buy NFT ---
 
-const BuyKitty = props => {
-  const { kitty, setStatus } = props
+const BuyNFT = props => {
+  const { nft, setStatus } = props
   const [open, setOpen] = React.useState(false)
 
   const confirmAndClose = unsub => {
@@ -144,7 +144,7 @@ const BuyKitty = props => {
     if (unsub && typeof unsub === 'function') unsub()
   }
 
-  if (!kitty.price) {
+  if (!nft.price) {
     return <></>
   }
 
@@ -155,15 +155,15 @@ const BuyKitty = props => {
       open={open}
       trigger={
         <Button basic color="green">
-          Buy Kitty
+          Buy NFT
         </Button>
       }
     >
-      <Modal.Header>Buy Kitty</Modal.Header>
+      <Modal.Header>Buy NFT</Modal.Header>
       <Modal.Content>
         <Form>
-          <Form.Input fluid label="Kitty ID" readOnly value={kitty.dna} />
-          <Form.Input fluid label="Price" readOnly value={kitty.price} />
+          <Form.Input fluid label="NFT ID" readOnly value={nft.dna} />
+          <Form.Input fluid label="Price" readOnly value={nft.price} />
         </Form>
       </Modal.Content>
       <Modal.Actions>
@@ -171,14 +171,14 @@ const BuyKitty = props => {
           Cancel
         </Button>
         <TxButton
-          label="Buy Kitty"
+          label="Buy NFT"
           type="SIGNED-TX"
           setStatus={setStatus}
           onClick={confirmAndClose}
           attrs={{
-            palletRpc: 'substrateKitties',
-            callable: 'buyKitty',
-            inputParams: [kitty.dna, kitty.price],
+            palletRpc: 'NFT',
+            callable: 'buyNFT',
+            inputParams: [nft.dna, nft.price],
             paramFields: [true, true],
           }}
         />
@@ -187,14 +187,14 @@ const BuyKitty = props => {
   )
 }
 
-// --- About Kitty Card ---
+// --- About NFT Card ---
 
-const KittyCard = props => {
-  const { kitty, setStatus } = props
-  const { dna = null, owner = null, gender = null, price = null } = kitty
+const NFTCard = props => {
+  const { nft, setStatus } = props
+  const { dna = null, owner = null, gender = null, price = null } = nft
   const displayDna = dna && dna.toJSON()
   const { currentAccount } = useSubstrateState()
-  const isSelf = currentAccount.address === kitty.owner
+  const isSelf = currentAccount.address === nft.owner
 
   return (
     <Card>
@@ -203,7 +203,7 @@ const KittyCard = props => {
           Mine
         </Label>
       )}
-      <KittyAvatar dna={dna.toU8a()} />
+      <NFTAvatar dna={dna.toU8a()} />
       <Card.Content>
         <Card.Meta style={{ fontSize: '.9em', overflowWrap: 'break-word' }}>
           DNA: {displayDna}
@@ -219,12 +219,12 @@ const KittyCard = props => {
       <Card.Content extra style={{ textAlign: 'center' }}>
         {owner === currentAccount.address ? (
           <>
-            <SetPrice kitty={kitty} setStatus={setStatus} />
-            <TransferModal kitty={kitty} setStatus={setStatus} />
+            <SetPrice nft={nft} setStatus={setStatus} />
+            <TransferModal nft={nft} setStatus={setStatus} />
           </>
         ) : (
           <>
-            <BuyKitty kitty={kitty} setStatus={setStatus} />
+            <BuyNFT nft={nft} setStatus={setStatus} />
           </>
         )}
       </Card.Content>
@@ -232,14 +232,14 @@ const KittyCard = props => {
   )
 }
 
-const KittyCards = props => {
-  const { kitties, setStatus } = props
+const NFTCards = props => {
+  const { nfts, setStatus } = props
 
-  if (kitties.length === 0) {
+  if (nfts.length === 0) {
     return (
       <Message info>
         <Message.Header>
-          No Kitty found here... Create one now!&nbsp;
+          No NFT found here... Create one now!&nbsp;
           <span role="img" aria-label="point-down">
             👇
           </span>
@@ -250,13 +250,13 @@ const KittyCards = props => {
 
   return (
     <Grid columns={3}>
-      {kitties.map((kitty, i) => (
-        <Grid.Column key={`kitty-${i}`}>
-          <KittyCard kitty={kitty} setStatus={setStatus} />
+      {nfts.map((nft, i) => (
+        <Grid.Column key={`nft-${i}`}>
+          <NFTCard nft={nft} setStatus={setStatus} />
         </Grid.Column>
       ))}
     </Grid>
   )
 }
 
-export default KittyCards
+export default NFTCards
