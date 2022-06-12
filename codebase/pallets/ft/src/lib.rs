@@ -1,6 +1,7 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
 pub use pallet::*;
+use pallet_assets as assets;
 
 #[frame_support::pallet]
 pub mod pallet {
@@ -21,14 +22,13 @@ pub mod pallet {
 	type BalanceOf<T> =
 		<<T as Config>::Currency as Currency<<T as frame_system::Config>::AccountId>>::Balance;
 
-	// Struct for holding NFT information.
+	// Struct for holding FT information.
 	#[derive(Clone, Encode, Decode, PartialEq, RuntimeDebug, TypeInfo, MaxEncodedLen)]
 	#[scale_info(skip_type_params(T))]
 	#[codec(mel_bound())]
-	pub struct NFT<T: Config> {
+	pub struct FT<T: Config> {
 		pub price: Option<BalanceOf<T>>,
 		pub owner: AccountOf<T>,
-		pub proof: BoundedVec<u8, T::MaxBytesInHash>,
 	}
 
 	#[pallet::pallet]
@@ -37,62 +37,16 @@ pub mod pallet {
 
 	/// Configure the pallet by specifying the parameters and types it depends on.
 	#[pallet::config]
-	pub trait Config: frame_system::Config {
-		/// Because this pallet emits events, it depends on the runtime's definition of an event.
-		type Event: From<Event<Self>> + IsType<<Self as frame_system::Config>::Event>;
-
-		/// The Currency handler for the NFT pallet.
-		type Currency: Currency<Self::AccountId>;
-
-		type NFTRandomness: Randomness<Self::Hash, Self::BlockNumber>;
-
-		// MaxNFTOwned constant
-		#[pallet::constant]
-		type MaxNFTOwned: Get<u32>;
-
-		/// For constraining the maximum bytes of a hash used for any nft
-		type MaxBytesInHash: Get<u32>;
-	}
+	pub trait Config: frame_system::Config + assets::Config {}
 
 	// Errors.
 	#[pallet::error]
-	pub enum Error<T> {
-		/// Handles arithmetic overflow when incrementing the nft counter.
-		CountForNFTsOverflow,
-		/// An account cannot own more NFTs than `MaxnftCount`.
-		ExceedMaxNFTOwned,
-		/// Buyer cannot be the owner.
-		BuyerIsNFTOwner,
-		/// Cannot transfer a NFT to its owner.
-		TransferToSelf,
-		/// This NFT already exists
-		NFTExists,
-		/// This NFT doesn't exist
-		NFTNotExist,
-		/// Handles checking that the NFT is owned by the account transferring, buying or setting
-		/// a price for it.
-		NotNFTOwner,
-		/// Ensures the NFT is for sale.
-		NFTNotForSale,
-		/// Ensures that the buying price is greater than the asking price.
-		NFTBidPriceTooLow,
-		/// Ensures that an account has enough funds to purchase a NFT.
-		NotEnoughBalance,
-	}
+	pub enum Error<T> {}
 
 	// Events.
 	#[pallet::event]
 	#[pallet::generate_deposit(pub(super) fn deposit_event)]
-	pub enum Event<T: Config> {
-		/// A new nft was successfully created. \[sender, nft_id\]
-		Created(T::AccountId, T::Hash),
-		/// nft price was successfully set. \[sender, nft_id, new_price\]
-		PriceSet(T::AccountId, T::Hash, Option<BalanceOf<T>>),
-		/// A nft was successfully transferred. \[from, to, nft_id\]
-		Transferred(T::AccountId, T::AccountId, T::Hash),
-		/// A nft was successfully bought. \[buyer, seller, nft_id, bid_price\]
-		Bought(T::AccountId, T::AccountId, T::Hash, BalanceOf<T>),
-	}
+	pub enum Event<T: Config> {}
 
 	#[pallet::storage]
 	#[pallet::getter(fn count_for_nfts)]
@@ -249,9 +203,9 @@ pub mod pallet {
 		// Helper to mint a NFT.
 		pub fn mint(
 			owner: &T::AccountId,
-			proof: &BoundedVec<u8, T::MaxBytesInHash>,
+			proof: BoundedVec<u8, T::MaxBytesInHash>,
 		) -> Result<T::Hash, Error<T>> {
-			let nft = NFT::<T> { price: None, owner: owner.clone(), proof: proof.clone() };
+			let nft = NFT::<T> { price: None, owner: owner.clone(), proof: &proof };
 
 			let nft_id = T::Hashing::hash_of(&nft);
 

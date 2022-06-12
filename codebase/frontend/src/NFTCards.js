@@ -9,7 +9,6 @@ import {
   Label,
 } from 'semantic-ui-react'
 
-import NFTAvatar from './NFTAvatar'
 import { useSubstrateState } from './substrate-lib'
 import { TxButton } from './substrate-lib/components'
 

@@ -6,7 +6,8 @@
 
 - Implementation of Procure-to-Pay and Quote to cash. Example. Retailer sends of digital token for the order. Smart contracts that automate the transaction of goods and services, once the order arrives smart contract is triggered to confirm the order has been recieved and then requests a working-capital loan form another node (bank), all automated. The bank verifies the order on the shared blockchain, approves the loan and records the loan's digital token on the blockchain.
 
-- Smart contracts can be programmed to assess the status of a transaction and automatically take actions such as releasing a payment, recording ledger entries, and flagging exceptions in need of manual intervention. Ensure that the buyer of goods pays within the agreed timeframe, a smart contract can be coded to automatically settle the invoice or reserve funds after the invoice has been approved by the finance function and accepted by the customer. This can be done through the balances pallet which has a reserved currency feature.
+Using the Asset pallet for fungiable assets and the transaction storage and payment pallets, create tradeable assets that can be issued by businesses which are fungiable. 
+
 
 - Login Page, Create the front end that the businesses will access. This will be seperate from the node that the business will run as their development team would set that up while the sales, management and financial team will access the portal to for supply chain and asset management. Front end should be visually appealing, possibly use the one that comes for the development environment.
 

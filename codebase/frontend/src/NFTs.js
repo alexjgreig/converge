@@ -16,6 +16,7 @@ export default function NFTs(props) {
   const [nftIds, setNFTIds] = useState([])
   const [nfts, setNFTs] = useState([])
   const [status, setStatus] = useState('')
+  const [digest, setDigest] = useState('')
 
 
 // Subscription function for nft count
@@ -54,12 +55,41 @@ const subscribeNFTs = () => {
     unsub && unsub()
   }
 }
+// Our `FileReader()` which is accessible from our functions below.
+  let fileReader;
+  // Takes our file, and creates a digest using the Blake2 256 hash function
+  const bufferToDigest = () => {
+    // Turns the file content to a hexadecimal representation.
+    const content = Array.from(new Uint8Array(fileReader.result))
+      .map(b => b.toString(16).padStart(2, '0'))
+      .join('');
+    const hash = blake2AsHex(content, 256);
+    setDigest(hash);
+  };
+
+  // Callback function for when a new file is selected.
+  const handleFileChosen = file => {
+    fileReader = new FileReader();
+    fileReader.onloadend = bufferToDigest;
+    fileReader.readAsArrayBuffer(file);
+  };
+
 useEffect(subscribeCount, [api, keyring])
 useEffect(subscribeNFTs, [api, keyring, nftIds])
 
 return <Grid.Column width={16}>
   <h1>NFTs</h1>
   <NFTCards nfts={nfts} setStatus={setStatus}/>
+<Form>
+<Form.Field>
+          {/* File selector with a callback to `handleFileChosen`. */}
+          <Input
+            type="file"
+            id="file"
+            label="Your File"
+            onChange={e => handleFileChosen(e.target.files[0])}
+          />
+	 </Form.Field>
 
 <Form style={{ margin: '1em 0' }}>
       <Form.Field style={{ textAlign: 'center' }}>
@@ -68,9 +98,9 @@ return <Grid.Column width={16}>
           type='SIGNED-TX'
           setStatus={setStatus}
           attrs={{
-            palletRpc: 'substrateNFTs',
+            palletRpc: 'NFTs',
             callable: 'createNFT',
-            inputParams: [],
+            inputParams: [digest],
             paramFields: []
           }}
         />
