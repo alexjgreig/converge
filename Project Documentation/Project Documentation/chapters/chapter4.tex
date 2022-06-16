@@ -1,0 +1,166 @@
+\let\textcircled=\pgftextcircled
+\chapter{Algorithms}
+\renewcommand{\ttdefault}{pcr}
+\lstset{
+	basicstyle=\small\ttfamily,
+	captionpos=t,
+	numbers=left,
+	tabsize=4,
+	keywordstyle=\bfseries,
+	breaklines=true,
+	columns=fullflexible,
+	numbersep=-8pt, 
+	frame = shadowbox,
+	morekeywords={BEGIN, END, DISPLAY, INPUT, IF, ENDIF, WHILE, DO, ELSE, THEN, OR, OPEN, RETURN, WRITE, NEXT, FOR, APPEND, CLOSE, PASS, AND, OUTPUT}
+}
+
+The core algorithms that will be used in the application are displayed below, written in the pseudo-code syntax:
+
+\section{Main Program}
+
+\begin{lstlisting}[caption=Main Program, escapechar=\@]
+	BEGIN MAINPROGRAM
+		@\underline{LoadLandingPage()}@ // Instantiates the program and loads the landing page with buttons for the user's selection.
+		IF SignUp.pressed() == True THEN
+			@\underline{LoadSignUp()}@ // Loads the sign up 
+			INPUT username, password, email, confirm_password
+			IF username.entered() == True AND email.entered() == True AND password.entered() == True AND password == confirm_password THEN
+				IF username.validate() == True AND password.validate() == True THEN
+					Display tickIcon
+					@\underline{SendValidationEmail()}@ // Sends a validation email to the email address that was inputted by the user, so that it can be verified.
+					Display "Verification Email Sent!"
+					@\underline{LoadPreferences()}@ // Loads the first question and the associated input sliders within them.
+					WHILE question <> last_question DO
+						INPUT answer // Answer is inputted through slider so the answer will be a float.
+						IF next_question.pressed() == True AND question_answered() THEN
+							@\underline{LoadNextQuestion()}@
+							@\underline{UpdateUserData(question, username, answer)}@ // Data will be entered into the database based upon the type of data so that the machine learning model can use the information to predict recommendations that the user will like. This is done so that this function can be reused to update the User Profile Database.
+
+						ELSE IF skip_question.pressed() == True THEN  
+							@\underline{LoadNextQuestion()}@
+						ENDIF
+					ENDWHILE
+
+					INPUT answer // Answer is inputted through slider so the answer will be a float.
+					IF next_question.pressed() == True AND question_answered() THEN
+						@\underline{UpdateUserData(username, question, answer)}@
+					ENDIF
+					@\underline{LoadTripPlanning()}@
+					INPUT budget, from, to, duration, group_size // from and to are the beginning and ending destinations.
+					business_records = @\underline{ReadBusinessData()}@ // Interacts with Business Database and reads the availabilities and different business events into memory.
+					user_data = @\underline{ReadUserData()}@ // Reads user data into memory to input into the machine learning model for recommending and optimising itinerary.
+					transport_data = @\underline{TransportAPI(duration)}@ //Retrives transport data within the duration period which can be used to decide the method of transport between locations when travelling.
+					ml_input_data = business_records, user_data, budget, from, to, duration, group_size, transport_data // Data that the machine learning model will use to make sophisiticated decisions about events to recommend the user. This datatype is a tuple as it contains multiple different datatypes.
+					ml_recommendations = @\underline{MachineLearningRecomendations(ml\_input\_data)}@
+					@\underline{LoadFlights(ml\_recommendations)}@ // Parameters of the function are the ml recommendations as these recommendations will then be loaded for the user.
+					INPUT flights_chosen
+					@\underline{UpdateUserData("Flights", username, flights\_chosen)}@ //Parameters are the dataID, data and the username of the User.
+
+					@\underline{LoadHotels(ml\_recommendations)}@
+					INPUT hotels_chosen
+					@\underline{UpdateUserData("Hotels", username, hotels\_chosen)}@
+
+					@\underline{LoadActivities(ml\_recommendations)}@
+					INPUT activities_chosen
+					@\underline{UpdateUserData("Activities", username, activities\_chosen)}@
+
+					@\underline{LoadDiscover()}@ // Loads the discover page which lets the user customise their itinerary.
+					INPUT extra_activities
+					@\underline{UpdateUserData("Activites", username, extra\_activities)}@
+
+					@\underline{LoadPayment()}@ 
+					INPUT payment_method
+					@\underline{ConcurrentBooking(payment\_method, user\_data)}@
+					DISPLAY Success
+
+					@\underline{HomeItinerary()}@ // Function that loads the itinerary and other options for the user. This will take the user to the main page and enable them to explore other activities, look at their flights and interact with the social options of the mobile application.
+
+				ELSE
+					Display crossIcon
+				ENDIF
+			ENDIF
+			IF username.entered() == True THEN
+				If username.validate() == True THEN
+					Display tickIcon
+				ELSE
+					Display crossIcon
+				ENDIF
+			ENDIF
+		ELSE IF SignIn.pressed() == True THEN
+			@\underline{LoadSignIn()}@ // Loads the sign in functionality
+			IF username.entered() == True AND password.entered() THEN
+				If username.validate() == True THEN
+					Display tickIcon
+					@\underline{HomeItinerary()}@ // Function that loads the itinerary and other options for the user. This will take the user to the main page and enable them to explore other activities, look at their flights and interact with the social options of the mobile application.
+
+				ELSE
+					Display crossIcon
+				ENDIF
+			ENDIF
+		ENDIF
+
+	END MAINPROGRAM
+
+\end{lstlisting}
+
+\section{Update User Data}
+
+\begin{lstlisting}[caption=Update User Data, escapechar=\@]
+	BEGIN  @\underline{UpdateUserData(dataID, username, data)}@
+		OPEN UserDatabase for relative access
+		dataIDs = array of identifiers of all questions // These should correlate to dataID passed into function when retrieving the user preferences.
+		FOR i=0 to users.len() DO
+			IF users[i].username == username THEN
+				FOR i=0 to dataIDs.len() DO
+					IF dataIDs[i] == dataID THEN
+						WRITE UserData.users[i] from data using dataID	
+					ENDIF
+				NEXT i
+			ENDIF
+		NEXT i
+		CLOSE UserDatabase
+	END  @\underline{UpdateUserData}@
+\end{lstlisting}
+
+Machine learning algorithms in recommender systems are typically classified into two categories — content based and collaborative filtering methods although modern recommenders combine both approaches. Collaborative filtering looks for patterns in the user activity in relation to other users, to produce user specific recommendations whereas Content-based filtering recommends items with similar content (e.g. metadata, description, topics, keywords) to the items the user has liked or indicated to like in the past. \\
+
+For this application the approach that would be taken based upon the preferences that are retrieved from the beginning would be a content-based filtering the user has indicated to some level their priorities when travelling and has given data through answering questions about preferences and other inputs such as budget. First the algorithm will find similarities between the events and activities within the business database and use the answers from the user to generate a similarity matrix. From this, the machine learning model will create Bayesian networks to model the links between the different events and the weightings of similarity, enabling recommendations to be made.
+
+\section{Machine Learning Recommendations and Optimisation}
+
+\begin{lstlisting}[caption=Machine Learning Recommendations and Optimisation, escapechar=\@]
+	BEGIN  @\underline{MachineLearningRecomendations(ml\_input\_data)}@
+		business_records, user_data, budget, from, to, duration, group_size, transport_data = ml_input_data // Data that the machine learning model will use to make sophisticated decisions about events to recommend the user. This is decompressing the tuple into multiple variables for utilisation.
+		FOR i=0 to user_data.len() DO
+			FOR j=0 to business_records.events.len() DO
+				similarity_matrix[i][j] = cosine_similarity(user_data[i], budget, business_records.events[i]) // Constructs the similarity matrix based upon the similarity of user preferences and target budget with the different events.
+			NEXT j
+		NEXT i
+
+		bayesian_network = @\underline{BayesianGeneration(similarity\_matrix, transport\_data)}@ //Transport data is used in the Bayesian network generation to link events not only by similarity and budget, but also the ability to be transported between the different locations.
+
+		availabilities = business_records.availability
+		recommendations = @\underline{GradientDescentOptimisation(availabilities,}@ @\underline{duration, user\_data, bayesian\_network)}@ //Optimisation of the timing of each event to make sure that the Itinerary lines up. Works by making steps towards a perfectly fitted timeslot by moving towards a minima and evaluating its performance based on a reward function. Utilises the events that are linked with the highest weighted similarity on the Bayesian network. 
+
+		RETURN recommendation // Data type of recommendation is an event from business_records.events
+		
+
+	END  @\underline{MachineLearningRecomendations(ml\_input\_data)}@
+			
+\end{lstlisting}
+\section{Interaction with Transport APIs}
+
+\begin{lstlisting}[caption= Interaction with Transport APIs, escapechar=\@]
+	BEGIN  @\underline{TransportAPI(duration)}@
+		transport_services = multidimensional array of n elements of [transportID, api_key, query_address] // All the api_keys needed to access the APIs of different transportation APIs, the multidimensional array of 3 by n, is so that each api key is coupled with a transport ID and query address so that each transport service can be identified and queried.
+
+		transport_data = empty multidimensional array // This array will contain each transport and the times of arrival and location for each transport service.
+		FOR i=0 to transport_services.len() DO
+			transport_data[i] = @\underline{HttpRequest(transport\_services[i][0],}@ @\underline{transport\_services[i][1], transport\_services[i][2])}@ 
+		NEXT i
+		RETURN transport_data
+	END  @\underline{TransportAPI}@
+\end{lstlisting}
+
+
+\vfill{}
