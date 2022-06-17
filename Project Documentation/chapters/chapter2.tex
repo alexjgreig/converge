@@ -1,33 +1,11 @@
 
 \let\textcircled=\pgftextcircled
-\chapter{IPO Diagram}
+\chapter{Issues relevant to program}
 
-\begin{longtable}{ |p{0.2\linewidth}|p{0.5\linewidth}|p{0.25\linewidth}|}
-\caption{IPO Table} \\
-\hline
- \textbf{Input} & \textbf{Processes} & \textbf{Output}\\
-\hline
-\endfirsthead
-\caption{\textit{(Continued)} IPO Table}\\
-\hline
-Input & Processes & Output \\
-\hline
-\endhead
-\hline
-\hline
-\hline
-\multicolumn{3}{r}{\textit{Continued on next page}} \\
-\endfoot
-\endlastfoot
- Button input of sign up or login & The application will take the user to the requested landing page so that they can login or sign up to the application. If the user has requested for their login details to be remembered in a past session, the login process will be completed using the stored credentials on the mobile so the user will be taken straight to the main page. & The landing page that was requested will be loaded for the user; this will be the verification to the user that the process has worked. \\
- \hline
-New username, password, email & The application will take the inputs from the signup page and validate the length, complexity of the password and validate that the username is unique and does not exist in the database. If the username and password are validated successfully then the application will create a new record in the database with the user information, however the boolean that stores the email validation status will be false. After this a confirmation email will be sent to the user inputted email, which when seen and confirmed will change the boolean to true. & The user will see a success message on the screen when the username and password are validated and a reminder to go their email and confirm it is the right email. Once their email is confirmed, they will be taken to the home page of the application. \\
-\hline
-Username, Password & The application will take the user input from the login landing page and check against a database to validate the login details. The application will check if the username exists within the database, then crosscheck the entered password against the encrypted password within the database. & If the password and username are successfully validated then the application will output a success message to the screen and the user will be taken to their home page on the mobile application. \\
-\hline
-The user inputs the location they want to travel to and the time frame of the holiday. Using a input bar, the user enters the budget they have for travel and the user also inputs a float between 0 and 1 using a slider on a range of questions that assess the priorities of the trip. &  The budget that the user entered is validated to make sure that it is a float and does not contain any characters other than numbers or a decimal place. The application utilises artificial intelligence, more specifically, machine learning to build profiles of the user and use this information to recommend and build a customised itinerary within the budget and time frame that they specified. Then the application will find flights and accommodation, using the flights api and database, based upon the user profile. The application will retrieve information from its database pertaining to the location that the user inputs and make decisions on whether to include the activities in the itinerary. This will be based upon the budget and priorities that the user has entered. The application will check the availability of each activity and make sure that all the times line up & The output to the user will be the different transportation, hotels and activities that are recommended to the user when building their itinerary. The sum of the costs will be shown at the bottom next to the specified budget. At the end, the whole itinerary will be displayed and if the user wishes they can make specific additions or change their priorities / budget and let the machine learning model shift their itinerary to meet their new wishes. \\
-\hline
-Confirm booking button & At the end this button will signal the application to book all the events in the schedule. Before this is done it will ensure that all events can be booked and there is availability. & Success message will be shown when all events are booked, while it is completing this process there will be a loading animation to inform the user that the process is happening. If there are certain events that don't fit in the schedule or are not available, new recommendations will be given or they will ask the user to change them. \\
-\hline
-\end{longtable}
+\initial{B}lockchain is an open digital ledger technology that has the capability of significantly altering the way that people operate in organizations. Blockchain’s ethical issues for business catalyse from its three main promises: immutability, disintermediation, and automation. Immutability results in the permanency of a human past record and raises ethical issues such as privacy and transparency concerns. Disintermediation refers to horizontal decision-making and the numerosity of stakeholders in verifying outcomes which raises ethical issues related to accountability and equal opportunity. Automation refers to the self-executing features of coded agreements called smart contracts which raises issues related to the absence of human decision making and the inability for human intervention. The main ethical issue that will be discussed, however, is the inadvertent asymmetry of power that is being created, as large corporations have access to more bargaining power, information, and efficient transactions then smaller possibly local businesses. \\
 
+In this sense, this business blockchain might enable transactions that are the product of force or possibly even fraudulent activity that would normally be prevented through institutions such as banks or government bodies. These mediating institutions would normally identify and constrain the misuse of markets by large corporations, however, by managing their assets and transactions through the business blockchain, this might be circumvented. This would enable different types of illegal and immoral transactions by facilitating transactions without intermediaries who can personally be held accountable for those transactions. \\
+
+A case in point is the “assassination markets.” AUGUR is an Ethereum-based blockchain application for the creation of “peer-to-peer prediction markets” which allow people to place bets secretly. AUGUR has created, invertedly, a utilisation of blockchain analogous to the “assassination market” in that it allows anonymous betting upon someone's death, which in turn may incentivize people to kill others so as to win these very bets. \\
+
+Although this real-world example is slightly disconnected from business blockchains the same unintended use cases of the software may occur. The actualisation of this ethical issue in this business blockchain may come in the form of businesses trading slave labour that breaks jurisdiction regarding minimum wages and the fair work rights, however, due to the transaction being mediated through blockchain technology, the unethical actions might go unnoticed.
