@@ -1,5 +1,5 @@
 \BOOKMARK [0][-]{chapter.1}{Problem Definition}{}% 1
-\BOOKMARK [0][-]{chapter.2}{Issues relevant to program}{}% 2
+\BOOKMARK [0][-]{chapter.2}{Issues Relevant to Program}{}% 2
 \BOOKMARK [0][-]{chapter.3}{Interface Design}{}% 3
 \BOOKMARK [0][-]{chapter.4}{Quality Assurance Criteria}{}% 4
 \BOOKMARK [0][-]{chapter.5}{Feasibility Study}{}% 5
@@ -9,21 +9,22 @@
 \BOOKMARK [1][-]{section.5.4}{Operational Feasibility}{chapter.5}% 9
 \BOOKMARK [1][-]{section.5.5}{Scheduling Feasibility}{chapter.5}% 10
 \BOOKMARK [1][-]{section.5.6}{Recommendation}{chapter.5}% 11
-\BOOKMARK [0][-]{chapter.6}{Algorithms}{}% 12
-\BOOKMARK [1][-]{section.6.1}{Information Surrounding Blockchain Development}{chapter.6}% 13
-\BOOKMARK [1][-]{section.6.2}{Algorithms - Node}{chapter.6}% 14
-\BOOKMARK [2][-]{subsection.6.2.1}{Node Main Program}{section.6.2}% 15
-\BOOKMARK [2][-]{subsection.6.2.2}{Runtime}{section.6.2}% 16
-\BOOKMARK [2][-]{subsection.6.2.3}{Non-fungible Tokens}{section.6.2}% 17
-\BOOKMARK [1][-]{section.6.3}{Algorithms - Front-end}{chapter.6}% 18
-\BOOKMARK [2][-]{subsection.6.3.1}{Main Program}{section.6.3}% 19
-\BOOKMARK [2][-]{subsection.6.3.2}{Display Non-fungible Tokens Module}{section.6.3}% 20
-\BOOKMARK [0][-]{chapter.7}{Project Work Evidence}{}% 21
-\BOOKMARK [1][-]{section.7.1}{10/4/22}{chapter.7}% 22
-\BOOKMARK [1][-]{section.7.2}{27/4/22}{chapter.7}% 23
-\BOOKMARK [1][-]{section.7.3}{10/5/22}{chapter.7}% 24
-\BOOKMARK [1][-]{section.7.4}{11/5/22}{chapter.7}% 25
-\BOOKMARK [1][-]{section.7.5}{23/5/22}{chapter.7}% 26
-\BOOKMARK [1][-]{section.7.6}{8/6/22}{chapter.7}% 27
-\BOOKMARK [1][-]{section.7.7}{10/6/22}{chapter.7}% 28
-\BOOKMARK [1][-]{section.7.8}{12/6/22}{chapter.7}% 29
+\BOOKMARK [0][-]{chapter.6}{GANTT Chart}{}% 12
+\BOOKMARK [0][-]{chapter.7}{Algorithms}{}% 13
+\BOOKMARK [1][-]{section.7.1}{Information Surrounding Blockchain Development}{chapter.7}% 14
+\BOOKMARK [1][-]{section.7.2}{Algorithms - Node}{chapter.7}% 15
+\BOOKMARK [2][-]{subsection.7.2.1}{Node Main Program}{section.7.2}% 16
+\BOOKMARK [2][-]{subsection.7.2.2}{Runtime}{section.7.2}% 17
+\BOOKMARK [2][-]{subsection.7.2.3}{Non-fungible Tokens}{section.7.2}% 18
+\BOOKMARK [1][-]{section.7.3}{Algorithms - Front-end}{chapter.7}% 19
+\BOOKMARK [2][-]{subsection.7.3.1}{Main Program}{section.7.3}% 20
+\BOOKMARK [2][-]{subsection.7.3.2}{Display Non-fungible Tokens Module}{section.7.3}% 21
+\BOOKMARK [0][-]{chapter.8}{Project Work Evidence}{}% 22
+\BOOKMARK [1][-]{section.8.1}{10/4/22}{chapter.8}% 23
+\BOOKMARK [1][-]{section.8.2}{27/4/22}{chapter.8}% 24
+\BOOKMARK [1][-]{section.8.3}{10/5/22}{chapter.8}% 25
+\BOOKMARK [1][-]{section.8.4}{11/5/22}{chapter.8}% 26
+\BOOKMARK [1][-]{section.8.5}{23/5/22}{chapter.8}% 27
+\BOOKMARK [1][-]{section.8.6}{8/6/22}{chapter.8}% 28
+\BOOKMARK [1][-]{section.8.7}{10/6/22}{chapter.8}% 29
+\BOOKMARK [1][-]{section.8.8}{12/6/22}{chapter.8}% 30

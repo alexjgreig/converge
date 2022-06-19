@@ -1,7 +1,7 @@
 \babel@toc {english}{}
 \par \nobreak \mbox {}\hfill {\bfseries Page}\par \nobreak 
 \contentsline {chapter}{\chapternumberline {1}Problem Definition}{1}{chapter.1}%
-\contentsline {chapter}{\chapternumberline {2}Issues relevant to program}{4}{chapter.2}%
+\contentsline {chapter}{\chapternumberline {2}Issues Relevant to Program}{4}{chapter.2}%
 \contentsline {chapter}{\chapternumberline {3}Interface Design}{7}{chapter.3}%
 \contentsline {chapter}{\chapternumberline {4}Quality Assurance Criteria}{9}{chapter.4}%
 \contentsline {chapter}{\chapternumberline {5}Feasibility Study}{10}{chapter.5}%
@@ -11,21 +11,22 @@
 \contentsline {section}{\numberline {5.4}Operational Feasibility}{13}{section.5.4}%
 \contentsline {section}{\numberline {5.5}Scheduling Feasibility}{14}{section.5.5}%
 \contentsline {section}{\numberline {5.6}Recommendation}{14}{section.5.6}%
-\contentsline {chapter}{\chapternumberline {6}Algorithms}{15}{chapter.6}%
-\contentsline {section}{\numberline {6.1}Information Surrounding Blockchain Development}{15}{section.6.1}%
-\contentsline {section}{\numberline {6.2}Algorithms - Node}{18}{section.6.2}%
-\contentsline {subsection}{\numberline {6.2.1}Node Main Program}{18}{subsection.6.2.1}%
-\contentsline {subsection}{\numberline {6.2.2}Runtime}{18}{subsection.6.2.2}%
-\contentsline {subsection}{\numberline {6.2.3}Non-fungible Tokens}{19}{subsection.6.2.3}%
-\contentsline {section}{\numberline {6.3}Algorithms - Front-end}{19}{section.6.3}%
-\contentsline {subsection}{\numberline {6.3.1}Main Program}{19}{subsection.6.3.1}%
-\contentsline {subsection}{\numberline {6.3.2}Display Non-fungible Tokens Module}{20}{subsection.6.3.2}%
-\contentsline {chapter}{\chapternumberline {7}Project Work Evidence}{21}{chapter.7}%
-\contentsline {section}{\numberline {7.1}10/4/22}{21}{section.7.1}%
-\contentsline {section}{\numberline {7.2}27/4/22}{21}{section.7.2}%
-\contentsline {section}{\numberline {7.3}10/5/22}{22}{section.7.3}%
-\contentsline {section}{\numberline {7.4}11/5/22}{23}{section.7.4}%
-\contentsline {section}{\numberline {7.5}23/5/22}{23}{section.7.5}%
-\contentsline {section}{\numberline {7.6}8/6/22}{23}{section.7.6}%
-\contentsline {section}{\numberline {7.7}10/6/22}{24}{section.7.7}%
-\contentsline {section}{\numberline {7.8}12/6/22}{24}{section.7.8}%
+\contentsline {chapter}{\chapternumberline {6}GANTT Chart}{15}{chapter.6}%
+\contentsline {chapter}{\chapternumberline {7}Algorithms}{16}{chapter.7}%
+\contentsline {section}{\numberline {7.1}Information Surrounding Blockchain Development}{16}{section.7.1}%
+\contentsline {section}{\numberline {7.2}Algorithms - Node}{19}{section.7.2}%
+\contentsline {subsection}{\numberline {7.2.1}Node Main Program}{19}{subsection.7.2.1}%
+\contentsline {subsection}{\numberline {7.2.2}Runtime}{19}{subsection.7.2.2}%
+\contentsline {subsection}{\numberline {7.2.3}Non-fungible Tokens}{20}{subsection.7.2.3}%
+\contentsline {section}{\numberline {7.3}Algorithms - Front-end}{21}{section.7.3}%
+\contentsline {subsection}{\numberline {7.3.1}Main Program}{21}{subsection.7.3.1}%
+\contentsline {subsection}{\numberline {7.3.2}Display Non-fungible Tokens Module}{22}{subsection.7.3.2}%
+\contentsline {chapter}{\chapternumberline {8}Project Work Evidence}{23}{chapter.8}%
+\contentsline {section}{\numberline {8.1}10/4/22}{23}{section.8.1}%
+\contentsline {section}{\numberline {8.2}27/4/22}{23}{section.8.2}%
+\contentsline {section}{\numberline {8.3}10/5/22}{24}{section.8.3}%
+\contentsline {section}{\numberline {8.4}11/5/22}{25}{section.8.4}%
+\contentsline {section}{\numberline {8.5}23/5/22}{25}{section.8.5}%
+\contentsline {section}{\numberline {8.6}8/6/22}{25}{section.8.6}%
+\contentsline {section}{\numberline {8.7}10/6/22}{26}{section.8.7}%
+\contentsline {section}{\numberline {8.8}12/6/22}{26}{section.8.8}%

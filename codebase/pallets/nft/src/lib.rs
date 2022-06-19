@@ -262,7 +262,7 @@ pub mod pallet {
 			// Check if the nft does not already exist in our storage map
 			ensure!(Self::nfts(&nft_id) == None, <Error<T>>::NFTExists);
 
-			// Performs this operation first because as it may fail
+			// Performs this operation first as it may fail
 			<NFTsOwned<T>>::try_mutate(&owner, |nft_vec| nft_vec.try_push(nft_id))
 				.map_err(|_| <Error<T>>::ExceedMaxNFTOwned)?;
 
