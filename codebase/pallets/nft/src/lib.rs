@@ -6,13 +6,10 @@ pub use pallet::*;
 pub mod pallet {
 	use frame_support::{
 		pallet_prelude::*,
-		sp_runtime::traits::Hash,
-		traits::{tokens::ExistenceRequirement, Currency, Randomness},
-		transactional,
+		traits::{tokens::ExistenceRequirement, Currency},
 	};
 	use frame_system::pallet_prelude::*;
 	use scale_info::TypeInfo;
-	use sp_io::hashing::blake2_128;
 
 	#[cfg(feature = "std")]
 	use frame_support::serde::{Deserialize, Serialize};
@@ -26,9 +23,9 @@ pub mod pallet {
 	#[scale_info(skip_type_params(T))]
 	#[codec(mel_bound())]
 	pub struct NFT<T: Config> {
-		pub price: Option<BalanceOf<T>>,
+		pub price: Option<BalanceOf<T>>, // None assumes that the NFT is not for sale.
 		pub owner: AccountOf<T>,
-		pub proof: BoundedVec<u8, T::MaxBytesInHash>,
+		pub proof: [u8; 16],
 	}
 
 	#[pallet::pallet]
@@ -44,14 +41,9 @@ pub mod pallet {
 		/// The Currency handler for the NFT pallet.
 		type Currency: Currency<Self::AccountId>;
 
-		type NFTRandomness: Randomness<Self::Hash, Self::BlockNumber>;
-
 		// MaxNFTOwned constant
 		#[pallet::constant]
 		type MaxNFTOwned: Get<u32>;
-
-		/// For constraining the maximum bytes of a hash used for any nft
-		type MaxBytesInHash: Get<u32>;
 	}
 
 	// Errors.
@@ -85,13 +77,13 @@ pub mod pallet {
 	#[pallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
 		/// A new nft was successfully created. \[sender, nft_id\]
-		Created(T::AccountId, T::Hash),
+		Created(T::AccountId, [u8; 16]),
 		/// nft price was successfully set. \[sender, nft_id, new_price\]
-		PriceSet(T::AccountId, T::Hash, Option<BalanceOf<T>>),
+		PriceSet(T::AccountId, [u8; 16], Option<BalanceOf<T>>),
 		/// A nft was successfully transferred. \[from, to, nft_id\]
-		Transferred(T::AccountId, T::AccountId, T::Hash),
+		Transferred(T::AccountId, T::AccountId, [u8; 16]),
 		/// A nft was successfully bought. \[buyer, seller, nft_id, bid_price\]
-		Bought(T::AccountId, T::AccountId, T::Hash, BalanceOf<T>),
+		Bought(T::AccountId, T::AccountId, [u8; 16], BalanceOf<T>),
 	}
 
 	#[pallet::storage]
@@ -101,18 +93,18 @@ pub mod pallet {
 	// ACTION #7: Remaining storage items.
 	#[pallet::storage]
 	#[pallet::getter(fn nfts)]
-	pub(super) type NFTs<T: Config> = StorageMap<_, Twox64Concat, T::Hash, NFT<T>>;
+	pub(super) type NFTs<T: Config> = StorageMap<_, Twox64Concat, [u8; 16], NFT<T>>;
 
 	#[pallet::storage]
 	#[pallet::getter(fn nfts_owned)]
 	/// Keeps track of what accounts own what NFT.
 	pub(super) type NFTsOwned<T: Config> =
-		StorageMap<_, Twox64Concat, T::AccountId, BoundedVec<T::Hash, T::MaxNFTOwned>, ValueQuery>;
+		StorageMap<_, Twox64Concat, T::AccountId, BoundedVec<[u8; 16], T::MaxNFTOwned>, ValueQuery>;
 
 	// Our pallet's genesis configuration.
 	#[pallet::genesis_config]
 	pub struct GenesisConfig<T: Config> {
-		pub nfts: Vec<(T::AccountId)>,
+		pub nfts: Vec<(T::AccountId, [u8; 16])>,
 	}
 
 	// Required to implement default for GenesisConfig.
@@ -126,10 +118,10 @@ pub mod pallet {
 	#[pallet::genesis_build]
 	impl<T: Config> GenesisBuild<T> for GenesisConfig<T> {
 		fn build(&self) {
-			// When building a nft from genesis config, we require the dna and gender to be
+			// When building a nft from genesis config, we require the proof to be
 			// supplied.
-			for (acct) in &self.nfts {
-				let _ = <Pallet<T>>::mint(acct);
+			for (acct, proof) in &self.nfts {
+				let _ = <Pallet<T>>::mint(acct, proof.clone());
 			}
 		}
 	}
@@ -137,12 +129,9 @@ pub mod pallet {
 	#[pallet::call]
 	impl<T: Config> Pallet<T> {
 		#[pallet::weight(100)]
-		pub fn create_nft(
-			origin: OriginFor<T>,
-			proof: BoundedVec<u8, T::MaxBytesInHash>,
-		) -> DispatchResult {
+		pub fn create_nft(origin: OriginFor<T>, proof: [u8; 16]) -> DispatchResult {
 			let sender = ensure_signed(origin)?;
-			let nft_id = Self::mint(&sender, &proof)?;
+			let nft_id = Self::mint(&sender, proof.clone())?;
 
 			Self::deposit_event(Event::Created(sender, nft_id));
 
@@ -153,7 +142,7 @@ pub mod pallet {
 		#[pallet::weight(100)]
 		pub fn set_price(
 			origin: OriginFor<T>,
-			nft_id: T::Hash,
+			nft_id: [u8; 16],
 			new_price: Option<BalanceOf<T>>,
 		) -> DispatchResult {
 			let sender = ensure_signed(origin)?;
@@ -173,7 +162,11 @@ pub mod pallet {
 		}
 
 		#[pallet::weight(100)]
-		pub fn transfer(origin: OriginFor<T>, to: T::AccountId, nft_id: T::Hash) -> DispatchResult {
+		pub fn transfer(
+			origin: OriginFor<T>,
+			to: T::AccountId,
+			nft_id: [u8; 16],
+		) -> DispatchResult {
 			let from = ensure_signed(origin)?;
 
 			// Ensure the nft exists and is called by the nft owner
@@ -194,11 +187,10 @@ pub mod pallet {
 		}
 
 		// buy_nft
-		#[transactional]
 		#[pallet::weight(100)]
 		pub fn buy_nft(
 			origin: OriginFor<T>,
-			nft_id: T::Hash,
+			nft_id: [u8; 16],
 			bid_price: BalanceOf<T>,
 		) -> DispatchResult {
 			let buyer = ensure_signed(origin)?;
@@ -247,34 +239,29 @@ pub mod pallet {
 		// TODO Part III: helper functions for dispatchable functions
 
 		// Helper to mint a NFT.
-		pub fn mint(
-			owner: &T::AccountId,
-			proof: &BoundedVec<u8, T::MaxBytesInHash>,
-		) -> Result<T::Hash, Error<T>> {
+		pub fn mint(owner: &T::AccountId, proof: [u8; 16]) -> Result<[u8; 16], Error<T>> {
 			let nft = NFT::<T> { price: None, owner: owner.clone(), proof: proof.clone() };
-
-			let nft_id = T::Hashing::hash_of(&nft);
 
 			// Performs this operation first as it may fail
 			let new_cnt =
 				Self::count_for_nfts().checked_add(1).ok_or(<Error<T>>::CountForNFTsOverflow)?;
 
 			// Check if the nft does not already exist in our storage map
-			ensure!(Self::nfts(&nft_id) == None, <Error<T>>::NFTExists);
+			ensure!(Self::nfts(&nft.proof) == None, <Error<T>>::NFTExists);
 
 			// Performs this operation first as it may fail
-			<NFTsOwned<T>>::try_mutate(&owner, |nft_vec| nft_vec.try_push(nft_id))
+			<NFTsOwned<T>>::try_mutate(&owner, |nft_vec| nft_vec.try_push(nft.proof))
 				.map_err(|_| <Error<T>>::ExceedMaxNFTOwned)?;
 
 			// Get the block number from the FRAME System pallet.
 			let current_block = <frame_system::Pallet<T>>::block_number();
 
-			<NFTs<T>>::insert(nft_id, nft);
+			<NFTs<T>>::insert(nft.proof, nft);
 			<CountForNFTs<T>>::put(new_cnt);
-			Ok(nft_id)
+			Ok(proof)
 		}
 
-		pub fn is_nft_owner(nft_id: &T::Hash, acct: &T::AccountId) -> Result<bool, Error<T>> {
+		pub fn is_nft_owner(nft_id: &[u8; 16], acct: &T::AccountId) -> Result<bool, Error<T>> {
 			match Self::nfts(nft_id) {
 				Some(nft) => Ok(nft.owner == *acct),
 				None => Err(<Error<T>>::NFTNotExist),
@@ -283,8 +270,7 @@ pub mod pallet {
 
 		//Transactional attribute means that the function must return ok otherwise all
 		//changes are discarded
-		#[transactional]
-		pub fn transfer_nft_to(nft_id: &T::Hash, to: &T::AccountId) -> Result<(), Error<T>> {
+		pub fn transfer_nft_to(nft_id: &[u8; 16], to: &T::AccountId) -> Result<(), Error<T>> {
 			let mut nft = Self::nfts(&nft_id).ok_or(<Error<T>>::NFTNotExist)?;
 
 			let prev_owner = nft.owner.clone();

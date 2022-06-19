@@ -44,8 +44,7 @@ use pallet_transaction_payment::CurrencyAdapter;
 pub use sp_runtime::BuildStorage;
 pub use sp_runtime::{Perbill, Permill};
 
-/// Import the template pallet.
-pub use pallet_template;
+pub use pallet_nft;
 
 /// An index to a block.
 pub type BlockNumber = u32;
@@ -260,15 +259,18 @@ parameter_types! {
 impl pallet_assets::Config for Runtime {
 	type Event = Event;
 	type Balance = Balance;
-	type AssetID = u32;
+	type AssetId = u32;
 	type Currency = Balances;
 	type ForceOrigin = EnsureRoot<AccountId>;
-	type AssetDepositBase = AssetDepositBase;
-	type AssetDepositPerZombie = AssetDepositPerZombie;
+	type AssetDeposit = AssetDepositBase;
 	type StringLimit = StringLimit;
 	type MetadataDepositBase = MetadataDepositBase;
 	type MetadataDepositPerByte = MetadataDepositPerByte;
 	type WeightInfo = ();
+	type AssetAccountDeposit = ();
+	type ApprovalDeposit = ();
+	type Freezer = ();
+	type Extra = ();
 }
 
 impl pallet_transaction_payment::Config for Runtime {
@@ -309,9 +311,7 @@ parameter_types! {
 impl pallet_nft::Config for Runtime {
 	type Event = Event;
 	type Currency = Balances;
-	type NFTRandomness = RandomnessCollectiveFlip;
 	type MaxNFTOwned = MaxNFTOwned;
-	type MaxBytesInHash = ConstU32<64>;
 }
 
 // Create the runtime by composing the FRAME pallets that were previously configured.
@@ -325,7 +325,7 @@ construct_runtime!(
 		RandomnessCollectiveFlip: pallet_randomness_collective_flip,
 		Timestamp: pallet_timestamp,
 		Aura: pallet_aura,
-		Assets: pallet_assets
+		Assets: pallet_assets,
 		Grandpa: pallet_grandpa,
 		Balances: pallet_balances,
 		TransactionPayment: pallet_transaction_payment,

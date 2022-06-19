@@ -531,9 +531,9 @@ INPUT chapters/chapter2.tex
 INPUT chapters/chapter2.tex
 INPUT chapters/chapter3.tex
 INPUT chapters/chapter3.tex
-INPUT figures/ui.png
-INPUT ./figures/ui.png
-INPUT ./figures/ui.png
+INPUT figures/ui1.png
+INPUT ./figures/ui1.png
+INPUT ./figures/ui1.png
 INPUT chapters/chapter4.tex
 INPUT chapters/chapter4.tex
 INPUT chapters/chapter5.tex

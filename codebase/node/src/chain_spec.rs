@@ -1,8 +1,9 @@
 use node_template_runtime::{
-	AccountId, AuraConfig, BalancesConfig, GenesisConfig, GrandpaConfig, NodeAuthorizationConfig,
-	Signature, SudoConfig, SystemConfig, WASM_BINARY,
+	AccountId, AuraConfig, BalancesConfig, GenesisConfig, GrandpaConfig, NFTConfig,
+	NodeAuthorizationConfig, Signature, SudoConfig, SystemConfig, WASM_BINARY,
 };
-use sc_service::ChainType;
+use sc_service::{ChainType, Properties};
+use serde_json::json;
 use sp_consensus_aura::sr25519::AuthorityId as AuraId;
 use sp_core::{sr25519, OpaquePeerId, Pair, Public};
 use sp_finality_grandpa::AuthorityId as GrandpaId;
@@ -150,7 +151,30 @@ fn testnet_genesis(
 			// Assign network admin rights.
 			key: Some(root_key),
 		},
+		nft: NFTConfig { nfts: vec![] },
 		transaction_payment: Default::default(),
+		assets: Default::default(),
+
+		node_authorization: NodeAuthorizationConfig {
+			nodes: vec![
+				(
+					OpaquePeerId(
+						bs58::decode("12D3KooWBmAwcd4PJNJvfV89HwE48nwkRmAgo8Vy3uQEyNNHBox2")
+							.into_vec()
+							.unwrap(),
+					),
+					endowed_accounts[0].clone(),
+				),
+				(
+					OpaquePeerId(
+						bs58::decode("12D3KooWQYV9dGMFoRzNStwpXztXaBUjtPqi6aU76ZgUriHhKust")
+							.into_vec()
+							.unwrap(),
+					),
+					endowed_accounts[1].clone(),
+				),
+			],
+		},
 	}
 }
 
@@ -234,8 +258,9 @@ fn mainnet_genesis(
 			// Assign network admin rights.
 			key: Some(root_key),
 		},
-		substrate_nfts: NFTConfig { nfts: vec![] },
+		nft: NFTConfig { nfts: vec![] },
 		transaction_payment: Default::default(),
+		assets: Default::default(),
 
 		node_authorization: NodeAuthorizationConfig {
 			nodes: vec![
