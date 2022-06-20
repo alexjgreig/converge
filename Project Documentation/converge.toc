@@ -31,3 +31,5 @@
 \contentsline {section}{\numberline {8.7}10/6/22}{26}{section.8.7}%
 \contentsline {section}{\numberline {8.8}12/6/22}{26}{section.8.8}%
 \contentsline {section}{\numberline {8.9}19/6/22}{26}{section.8.9}%
+\contentsline {section}{\numberline {8.10}Evolution of Gantt Chart and Time Management}{27}{section.8.10}%
+\contentsline {section}{\numberline {8.11}22/6/22}{27}{section.8.11}%
