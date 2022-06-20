@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2021.2.24)  19 JUN 2022 22:55
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2021.2.24)  20 JUN 2022 14:26
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1025,9 +1025,9 @@ Language: english 2017/06/06 v3.3r English support from the babel system
 Package babel Info: \l@canadian = using hyphenrules for english
 (babel)             (\language0) on input line 102.
 Package babel Info: \l@australian = using hyphenrules for ukenglish
-(babel)             (\language12) on input line 105.
+(babel)             (\language13) on input line 105.
 Package babel Info: \l@newzealand = using hyphenrules for ukenglish
-(babel)             (\language12) on input line 108.
+(babel)             (\language13) on input line 108.
 )) (/usr/share/texlive/texmf-dist/tex/latex/hyperref/hyperref.sty
 Package: hyperref 2020/01/14 v7.00d Hypertext links for LaTeX
  (/usr/share/texlive/texmf-dist/tex/latex/pdftexcmds/pdftexcmds.sty
@@ -1798,11 +1798,6 @@ Underfull \hbox (badness 10000) in paragraph at lines 18--19
  []
 
 [12]
-Underfull \hbox (badness 10000) in paragraph at lines 24--25
-
- []
-
-
 Underfull \hbox (badness 10000) in paragraph at lines 28--29
 
  []
@@ -2001,13 +1996,13 @@ Package rerunfilecheck Info: File `Converge.out' has not changed.
 Here is how much of TeX's memory you used:
  34731 strings out of 481239
  634646 string characters out of 5920377
- 1225171 words of memory out of 5000000
+ 1225168 words of memory out of 5000000
  48873 multiletter control sequences out of 15000+600000
  607132 words of font info for 228 fonts, out of 8000000 for 9000
  1146 hyphenation exceptions out of 8191
  55i,13n,96p,1950b,2004s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/share/texlive/texmf-dist/fonts/type1/urw/courier/ucrb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/ncntrsbk/uncb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/ncntrsbk/uncr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/ncntrsbk/uncri8a.pfb>
-Output written on Converge.pdf (29 pages, 2735368 bytes).
+Output written on Converge.pdf (29 pages, 2735580 bytes).
 PDF statistics:
  457 PDF objects out of 1000 (max. 8388607)
  408 compressed objects within 5 object streams

@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { Form, Grid } from 'semantic-ui-react'
+import { Form, Input, Grid} from 'semantic-ui-react'
 
 import { useSubstrateState } from './substrate-lib'
 import { TxButton } from './substrate-lib/components'
+
+// Polkadot-JS utilities for hashing data.
+import { blake2AsHex } from '@polkadot/util-crypto'
 
 import NFTCards from './NFTCards'
 
@@ -77,11 +80,14 @@ const subscribeNFTs = () => {
 useEffect(subscribeCount, [api, keyring])
 useEffect(subscribeNFTs, [api, keyring, nftIds])
 
-return <Grid.Column width={16}>
+return (
+
+<Grid.Column width={16}>
   <h1>NFTs</h1>
   <NFTCards nfts={nfts} setStatus={setStatus}/>
-<Form>
-<Form.Field>
+	
+<Form style={{ margin: '1em 0' }}>
+ <Form.Field>
           {/* File selector with a callback to `handleFileChosen`. */}
           <Input
             type="file"
@@ -89,9 +95,7 @@ return <Grid.Column width={16}>
             label="Your File"
             onChange={e => handleFileChosen(e.target.files[0])}
           />
-	 </Form.Field>
-
-<Form style={{ margin: '1em 0' }}>
+	</Form.Field>
       <Form.Field style={{ textAlign: 'center' }}>
         <TxButton
           label='Create NFT'
@@ -107,5 +111,6 @@ return <Grid.Column width={16}>
       </Form.Field>
     </Form>
     <div style={{ overflowWrap: 'break-word' }}>{status}</div>
-  </Grid.Column>;
+  </Grid.Column>
+)
 }

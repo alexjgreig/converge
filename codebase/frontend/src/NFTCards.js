@@ -42,7 +42,7 @@ const TransferModal = props => {
       <Modal.Header>NFT Transfer</Modal.Header>
       <Modal.Content>
         <Form>
-          <Form.Input fluid label="NFT ID" readOnly value={nft.dna} />
+          <Form.Input fluid label="NFT ID" readOnly value={nft.nft_id} />
           <Form.Input
             fluid
             label="Receiver"
@@ -63,7 +63,7 @@ const TransferModal = props => {
           attrs={{
             palletRpc: 'NFT',
             callable: 'transfer',
-            inputParams: [formValue.target, nft.dna],
+            inputParams: [formValue.target, nft.nft_id],
             paramFields: [true, true],
           }}
         />
@@ -190,8 +190,7 @@ const BuyNFT = props => {
 
 const NFTCard = props => {
   const { nft, setStatus } = props
-  const { dna = null, owner = null, gender = null, price = null } = nft
-  const displayDna = dna && dna.toJSON()
+  const { owner = null, price = null } = nft
   const { currentAccount } = useSubstrateState()
   const isSelf = currentAccount.address === nft.owner
 
@@ -202,13 +201,8 @@ const NFTCard = props => {
           Mine
         </Label>
       )}
-      <NFTAvatar dna={dna.toU8a()} />
       <Card.Content>
-        <Card.Meta style={{ fontSize: '.9em', overflowWrap: 'break-word' }}>
-          DNA: {displayDna}
-        </Card.Meta>
         <Card.Description>
-          <p style={{ overflowWrap: 'break-word' }}>Gender: {gender}</p>
           <p style={{ overflowWrap: 'break-word' }}>Owner: {owner}</p>
           <p style={{ overflowWrap: 'break-word' }}>
             Price: {price || 'Not For Sale'}
