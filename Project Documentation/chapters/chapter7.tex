@@ -55,7 +55,7 @@ The core algorithms that will be used in the application are displayed below, wr
 
 \begin{lstlisting}[caption=Main Program, escapechar=\@]
 	BEGIN MAINPROGRAM(node_key, port, ws_port, rpc_port, ed25519_key, sr25519_key, bootnodes)
-		@\underline{services(node\_key, port, ws\_port, rpc\_port, ed25519\_key, }@ @\underline{sr25519\_key, bootnodes)}@ // This module starts a thread that spins up the network, client and extrinsic pool.
+		@\underline{services(node\_key, port, ws\_port, rpc\_port, ed25519\_key, sr25519\_key }@ @\underline{sr25519\_key, bootnodes)}@ // This module starts a thread that spins up the network, client and extrinsic pool. The ed25199 key is for finalising blocks with GRANDPA and the sr25519 key is for authoring blocks.
 		@\underline{non\_fungible\_tokens(rpc\_port)}@ // Runtime "Pallet" that handles non-fungible token issuing and transference within the business blockchain. The RPC channel is the transmission line in that the interaction from the front end will go through.
 		@\underline{fungible\_tokens()}@ // Runtime "Pallet" that handles fungible tokens and their minting, transference and architecture patterns.
 		@\underline{runtime()}@ // This function/module handles all aspects of the runtime as described above.

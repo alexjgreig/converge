@@ -9,9 +9,10 @@ import { blake2AsHex } from '@polkadot/util-crypto'
 
 import NFTCards from './NFTCards'
 
-const parseNFT = ({ price, owner }) => ({
+const parseNFT = ({ price, owner, proof }) => ({
   price: price.toJSON(),
   owner: owner.toJSON(),
+  proof,
 })
 
 export default function NFTs(props) {
@@ -30,7 +31,7 @@ const subscribeCount = () => {
       async count => {
         // Fetch all nft keys
         const entries = await api.query.substrateNFTs.nfts.entries()
-        const ids = entries.map(entry => entry[1].unwrap().dna)
+        const ids = entries.map(entry => entry[1].unwrap().proof)
         setNFTIds(ids)
       }
     )
@@ -104,7 +105,7 @@ return (
           attrs={{
             palletRpc: 'NFTs',
             callable: 'createNFT',
-            inputParams: [digest],
+            inputParams: [],
             paramFields: []
           }}
         />
@@ -112,5 +113,18 @@ return (
     </Form>
     <div style={{ overflowWrap: 'break-word' }}>{status}</div>
   </Grid.Column>
+
+
+	<Grid.Column>
+      <h1>Fungible Assets</h1>
+      <Form>
+        <Form.Field>
+	<Message
+            header=""
+            list={[digest, `Owner: ${owner}`, `Block: ${block}`]}
+          />
+        </Form.Field>
+      </Form>
+    </Grid.Column>
 )
 }

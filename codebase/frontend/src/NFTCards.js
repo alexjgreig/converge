@@ -6,7 +6,6 @@ import {
   Message,
   Modal,
   Form,
-  Label,
 } from 'semantic-ui-react'
 
 import { useSubstrateState } from './substrate-lib'
@@ -42,7 +41,7 @@ const TransferModal = props => {
       <Modal.Header>NFT Transfer</Modal.Header>
       <Modal.Content>
         <Form>
-          <Form.Input fluid label="NFT ID" readOnly value={nft.nft_id} />
+          <Form.Input fluid label="NFT ID" readOnly value={nft.proof} />
           <Form.Input
             fluid
             label="Receiver"
@@ -63,7 +62,7 @@ const TransferModal = props => {
           attrs={{
             palletRpc: 'NFT',
             callable: 'transfer',
-            inputParams: [formValue.target, nft.nft_id],
+            inputParams: [formValue.target, nft.proof],
             paramFields: [true, true],
           }}
         />
@@ -102,7 +101,7 @@ const SetPrice = props => {
       <Modal.Header>Set NFT Price</Modal.Header>
       <Modal.Content>
         <Form>
-          <Form.Input fluid label="NFT ID" readOnly value={nft.dna} />
+          <Form.Input fluid label="NFT ID" readOnly value={nft.proof} />
           <Form.Input
             fluid
             label="Price"
@@ -123,7 +122,7 @@ const SetPrice = props => {
           attrs={{
             palletRpc: 'NFT',
             callable: 'setPrice',
-            inputParams: [nft.dna, formValue.target],
+            inputParams: [nft.proof, formValue.target],
             paramFields: [true, true],
           }}
         />
@@ -161,7 +160,7 @@ const BuyNFT = props => {
       <Modal.Header>Buy NFT</Modal.Header>
       <Modal.Content>
         <Form>
-          <Form.Input fluid label="NFT ID" readOnly value={nft.dna} />
+          <Form.Input fluid label="NFT ID" readOnly value={nft.proof} />
           <Form.Input fluid label="Price" readOnly value={nft.price} />
         </Form>
       </Modal.Content>
@@ -177,7 +176,7 @@ const BuyNFT = props => {
           attrs={{
             palletRpc: 'NFT',
             callable: 'buyNFT',
-            inputParams: [nft.dna, nft.price],
+            inputParams: [nft.proof, nft.price],
             paramFields: [true, true],
           }}
         />
@@ -190,20 +189,15 @@ const BuyNFT = props => {
 
 const NFTCard = props => {
   const { nft, setStatus } = props
-  const { owner = null, price = null } = nft
+  const { owner = null, price = null, proof = null } = nft
   const { currentAccount } = useSubstrateState()
-  const isSelf = currentAccount.address === nft.owner
 
   return (
     <Card>
-      {isSelf && (
-        <Label as="a" floating color="teal">
-          Mine
-        </Label>
-      )}
       <Card.Content>
         <Card.Description>
           <p style={{ overflowWrap: 'break-word' }}>Owner: {owner}</p>
+          <p style={{ overflowWrap: 'break-word' }}>Proof: {proof}</p>
           <p style={{ overflowWrap: 'break-word' }}>
             Price: {price || 'Not For Sale'}
           </p>

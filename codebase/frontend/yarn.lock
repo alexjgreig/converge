@@ -12742,9 +12742,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"substrate-front-end-template@workspace:.":
+"substrate-front-end-converge@workspace:.":
   version: 0.0.0-use.local
-  resolution: "substrate-front-end-template@workspace:."
+  resolution: "substrate-front-end-converge@workspace:."
   dependencies:
     "@polkadot/api": ^7.10.1
     "@polkadot/extension-dapp": ^0.42.7

@@ -330,7 +330,7 @@ construct_runtime!(
 		Balances: pallet_balances,
 		TransactionPayment: pallet_transaction_payment,
 		Sudo: pallet_sudo,
-		// Include the custom logic from the pallet-template in the runtime.
+		// Include the custom logic from the pallet-nft in the runtime.
 		NFT: pallet_nft,
 		NodeAuthorization: pallet_node_authorization,
 	}
@@ -377,7 +377,6 @@ mod benches {
 		[frame_system, SystemBench::<Runtime>]
 		[pallet_balances, Balances]
 		[pallet_timestamp, Timestamp]
-		[pallet_template, TemplateModule]
 	);
 }
 

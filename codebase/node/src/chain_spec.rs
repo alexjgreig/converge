@@ -1,4 +1,4 @@
-use node_template_runtime::{
+use node_converge_runtime::{
 	AccountId, AuraConfig, BalancesConfig, GenesisConfig, GrandpaConfig, NFTConfig,
 	NodeAuthorizationConfig, Signature, SudoConfig, SystemConfig, WASM_BINARY,
 };
@@ -79,11 +79,16 @@ pub fn development_config() -> Result<ChainSpec, String> {
 pub fn local_testnet_config() -> Result<ChainSpec, String> {
 	let wasm_binary = WASM_BINARY.ok_or_else(|| "Development wasm not available".to_string())?;
 
+	let mut props: Properties = Properties::new();
+
+	let value = json!("CVG");
+	props.insert("tokenSymbol".to_string(), value);
+
 	Ok(ChainSpec::from_genesis(
 		// Name
-		"Local Testnet",
+		"Converge",
 		// ID
-		"local_testnet",
+		"converge_net",
 		ChainType::Local,
 		move || {
 			testnet_genesis(
@@ -118,7 +123,7 @@ pub fn local_testnet_config() -> Result<ChainSpec, String> {
 		None,
 		// Properties
 		None,
-		None,
+		Some(props),
 		// Extensions
 		None,
 	))
@@ -225,7 +230,7 @@ pub fn mainnet_config() -> Result<ChainSpec, String> {
 		None,
 		// Properties
 		None,
-		Some(props),
+		None,
 		// Extensions
 		None,
 	))

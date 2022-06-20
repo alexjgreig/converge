@@ -1,0 +1,42 @@
+1) Command to generate Sr25519 Key
+./target/release/node-converge key generate --scheme Sr25519
+
+2) Command to generate Ed25519 Key
+./target/release/node-converge key generate --scheme Ed25519
+
+3) Command to insert key into the keystore
+
+./target/release/node-converge key insert \
+    --base-path /tmp/node01 \
+    --chain local \
+    --key-type aura \
+    --scheme Sr25519 \
+    --suri "";
+
+./target/release/node-converge key insert \
+    --base-path /tmp/node01 \
+    --chain local \
+    --key-type gran \
+    --scheme Ed25519 \
+    --suri "";
+
+Check if they are in keystore:
+ls /tmp/node01/chains/converge_net/keystore/
+
+4) To start node something like:
+
+./target/release/node-converge \
+    --base-path /tmp/node01 \
+    --name Node1 \
+    --chain ./customSpecRaw.json  \
+    --keystore-path /tmp/node01/chains/local_testnet/keystore/ \
+    --port 30333 \
+    --ws-port 9944 \
+    --rpc-port 9933 \
+    --unsafe-ws-external \
+    --unsafe-rpc-external \
+    --rpc-cors=all \
+    --validator \
+    --bootnodes /ip4/127.0.0.1/tcp/30333/p2p/12D3KooWQYV9dGMFoRzNStwpXztXaBUjtPqi6aU76ZgUriHhKust
+
+Start another nodes this one with bootnodes and make sure the two nodes have different ports ws-ports and rpc-ports as they are running on the same computer.
