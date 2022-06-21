@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Form, Input, Grid} from 'semantic-ui-react'
+import { Form, Input, Grid, Message} from 'semantic-ui-react'
 
 import { useSubstrateState } from './substrate-lib'
 import { TxButton } from './substrate-lib/components'
@@ -112,19 +112,15 @@ return (
       </Form.Field>
     </Form>
     <div style={{ overflowWrap: 'break-word' }}>{status}</div>
-  </Grid.Column>
-
-
-	<Grid.Column>
       <h1>Fungible Assets</h1>
       <Form>
         <Form.Field>
 	<Message
             header=""
-            list={[digest, `Owner: ${owner}`, `Block: ${block}`]}
+            
           />
         </Form.Field>
       </Form>
-    </Grid.Column>
+</Grid.Column>
 )
 }
