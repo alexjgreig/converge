@@ -44,7 +44,7 @@ use pallet_transaction_payment::CurrencyAdapter;
 pub use sp_runtime::BuildStorage;
 pub use sp_runtime::{Perbill, Permill};
 
-pub use pallet_nft;
+pub use pallet_nfts;
 
 /// An index to a block.
 pub type BlockNumber = u32;
@@ -243,7 +243,7 @@ impl pallet_balances::Config for Runtime {
 	/// The ubiquitous event type.
 	type Event = Event;
 	type DustRemoval = ();
-	type ExistentialDeposit = ConstU128<500>;
+	type ExistentialDeposit = ConstU128<300>;
 	type AccountStore = System;
 	type WeightInfo = pallet_balances::weights::SubstrateWeight<Runtime>;
 }
@@ -303,15 +303,15 @@ impl pallet_node_authorization::Config for Runtime {
 }
 
 parameter_types! {
-	// The max amount of NFT that one could own, need to shift this value. A max is set so that one
-	// cannot flood the network with NFT creations.
-	pub const MaxNFTOwned: u32 = 1000;
+	// The max amount of Nft that one could own, need to shift this value. A max is set so that one
+	// cannot flood the network with Nft creations.
+	pub const MaxNftsOwned: u32 = 1000;
 }
 
-impl pallet_nft::Config for Runtime {
+impl pallet_nfts::Config for Runtime {
 	type Event = Event;
 	type Currency = Balances;
-	type MaxNFTOwned = MaxNFTOwned;
+	type MaxNftsOwned = MaxNftsOwned;
 }
 
 // Create the runtime by composing the FRAME pallets that were previously configured.
@@ -331,7 +331,7 @@ construct_runtime!(
 		TransactionPayment: pallet_transaction_payment,
 		Sudo: pallet_sudo,
 		// Include the custom logic from the pallet-nft in the runtime.
-		NFT: pallet_nft,
+		SubstrateNfts: pallet_nfts,
 		NodeAuthorization: pallet_node_authorization,
 	}
 );

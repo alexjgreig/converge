@@ -6,6 +6,7 @@ import {
   Message,
   Modal,
   Form,
+  Image,
 } from 'semantic-ui-react'
 
 import { useSubstrateState } from './substrate-lib'
@@ -60,7 +61,7 @@ const TransferModal = props => {
           setStatus={setStatus}
           onClick={confirmAndClose}
           attrs={{
-            palletRpc: 'NFT',
+            palletRpc: 'substrateNfts',
             callable: 'transfer',
             inputParams: [formValue.target, nft.proof],
             paramFields: [true, true],
@@ -120,7 +121,7 @@ const SetPrice = props => {
           setStatus={setStatus}
           onClick={confirmAndClose}
           attrs={{
-            palletRpc: 'NFT',
+            palletRpc: 'substrateNfts',
             callable: 'setPrice',
             inputParams: [nft.proof, formValue.target],
             paramFields: [true, true],
@@ -174,7 +175,7 @@ const BuyNFT = props => {
           setStatus={setStatus}
           onClick={confirmAndClose}
           attrs={{
-            palletRpc: 'NFT',
+            palletRpc: 'substrateNfts',
             callable: 'buyNFT',
             inputParams: [nft.proof, nft.price],
             paramFields: [true, true],
@@ -189,15 +190,20 @@ const BuyNFT = props => {
 
 const NFTCard = props => {
   const { nft, setStatus } = props
-  const { owner = null, price = null, proof = null } = nft
+  const { owner = null, price = null, proof = null, name=null} = nft
   const { currentAccount } = useSubstrateState()
+  const displayProof = proof && proof.toJSON()
 
   return (
     <Card>
+      <Image src='/img/doc.png' wrapped ui ={false} />
       <Card.Content>
+	 <Card.Meta style={{ fontSize: '.9em', overflowWrap: 'break-word' }}>
+          Proof: {displayProof}
+        </Card.Meta> 
         <Card.Description>
           <p style={{ overflowWrap: 'break-word' }}>Owner: {owner}</p>
-          <p style={{ overflowWrap: 'break-word' }}>Proof: {proof}</p>
+          <p style={{ overflowWrap: 'break-word' }}>Name: {name}</p>
           <p style={{ overflowWrap: 'break-word' }}>
             Price: {price || 'Not For Sale'}
           </p>
@@ -226,7 +232,7 @@ const NFTCards = props => {
     return (
       <Message info>
         <Message.Header>
-          No NFT found here... Create one now!&nbsp;
+          No NFTs Created... Create one now!&nbsp;
           <span role="img" aria-label="point-down">
             👇
           </span>

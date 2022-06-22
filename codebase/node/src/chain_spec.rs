@@ -1,6 +1,6 @@
 use node_converge_runtime::{
-	AccountId, AuraConfig, BalancesConfig, GenesisConfig, GrandpaConfig, NFTConfig,
-	NodeAuthorizationConfig, Signature, SudoConfig, SystemConfig, WASM_BINARY,
+	AccountId, AuraConfig, BalancesConfig, GenesisConfig, GrandpaConfig, NodeAuthorizationConfig,
+	Signature, SubstrateNftsConfig, SudoConfig, SystemConfig, WASM_BINARY,
 };
 use sc_service::{ChainType, Properties};
 use serde_json::json;
@@ -156,7 +156,7 @@ fn testnet_genesis(
 			// Assign network admin rights.
 			key: Some(root_key),
 		},
-		nft: NFTConfig { nfts: vec![] },
+		substrate_nfts: SubstrateNftsConfig { nfts: vec![] },
 		transaction_payment: Default::default(),
 		assets: Default::default(),
 
@@ -263,7 +263,7 @@ fn mainnet_genesis(
 			// Assign network admin rights.
 			key: Some(root_key),
 		},
-		nft: NFTConfig { nfts: vec![] },
+		substrate_nfts: SubstrateNftsConfig { nfts: vec![] },
 		transaction_payment: Default::default(),
 		assets: Default::default(),
 

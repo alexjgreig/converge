@@ -40,3 +40,25 @@ ls /tmp/node01/chains/converge_net/keystore/
     --bootnodes /ip4/127.0.0.1/tcp/30333/p2p/12D3KooWQYV9dGMFoRzNStwpXztXaBUjtPqi6aU76ZgUriHhKust
 
 Start another nodes this one with bootnodes and make sure the two nodes have different ports ws-ports and rpc-ports as they are running on the same computer.
+
+Prebuilt:
+
+./target/release/node-converge \
+--chain ./customSpecRaw.json \
+--base-path /tmp/validator1 \
+--alice \
+--node-key=c12b6d18942f5ee8528c8e2baf4e147b5c5c18710926ea492d09cbd9f6c9f82a \
+--port 30333 \
+--ws-port 9944 \
+--rpc-cors all
+
+In a new terminal, leave Alice running
+
+./target/release/node-converge \
+--chain ./customSpecRaw.json \
+--base-path /tmp/validator2 \
+--bob \
+--node-key=6ce3be907dbcabf20a9a5a60a712b4256a54196000a8ed4050d352bc113f8c58 \
+--port 30334 \
+--ws-port 9945 \
+--rpc-cors all

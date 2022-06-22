@@ -19,10 +19,10 @@ import Events from './Events'
 import Interactor from './Interactor'
 import Metadata from './Metadata'
 import NodeInfo from './NodeInfo'
-import TemplateModule from './TemplateModule'
 import Transfer from './Transfer'
 import Upgrade from './Upgrade'
-import NFT from './NFTs'
+import Nft from './Nfts'
+// import Assets from './Assets'
 
 function Main() {
   const { apiState, apiError, keyringState } = useSubstrateState()
@@ -40,7 +40,7 @@ function Main() {
           negative
           compact
           floating
-          header="Error Connecting to Substrate"
+          header="Error Connecting to Converge"
           content={`Connection to websocket '${errObj.target.url}' failed.`}
         />
       </Grid.Column>
@@ -48,7 +48,7 @@ function Main() {
   )
 
   if (apiState === 'ERROR') return message(apiError)
-  else if (apiState !== 'READY') return loader('Connecting to Substrate')
+  else if (apiState !== 'READY') return loader('Connecting to Converge')
 
   if (keyringState !== 'READY') {
     return loader(
@@ -74,9 +74,6 @@ function Main() {
           <Grid.Row stretched>
             <Balances />
           </Grid.Row>
-	  <Grid.Row>
-  <NFT />
-</Grid.Row>
           <Grid.Row>
             <Transfer />
             <Upgrade />
@@ -86,7 +83,8 @@ function Main() {
             <Events />
           </Grid.Row>
           <Grid.Row>
-            <TemplateModule />
+	  {/*<Assets />*/}
+  	    <Nft />
           </Grid.Row>
         </Grid>
       </Container>

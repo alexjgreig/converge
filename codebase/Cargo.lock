@@ -3777,7 +3777,7 @@ dependencies = [
  "pallet-aura",
  "pallet-balances",
  "pallet-grandpa",
- "pallet-nft",
+ "pallet-nfts",
  "pallet-node-authorization",
  "pallet-randomness-collective-flip",
  "pallet-sudo",
@@ -4048,7 +4048,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "pallet-nft"
+name = "pallet-nfts"
 version = "4.0.0-dev"
 dependencies = [
  "frame-benchmarking",
