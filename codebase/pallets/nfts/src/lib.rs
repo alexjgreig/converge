@@ -25,7 +25,7 @@ pub mod pallet {
 	#[codec(mel_bound())]
 	pub struct Nft<T: Config> {
 		pub proof: [u8; 16],
-		pub price: Option<BalanceOf<T>>, // None assumes that the Nft is not for sale.
+		pub price: Option<BalanceOf<T>>,
 		pub name: [u8; 16],
 		pub owner: AccountOf<T>,
 	}
@@ -94,7 +94,7 @@ pub mod pallet {
 	#[pallet::getter(fn count_for_nfts)]
 	pub(super) type CountForNfts<T: Config> = StorageValue<_, u64, ValueQuery>;
 
-	// ACTION #7: Remaining storage items.
+	//  Remaining storage items.
 	#[pallet::storage]
 	#[pallet::getter(fn nfts)]
 	pub(super) type Nfts<T: Config> = StorageMap<_, Twox64Concat, [u8; 16], Nft<T>>;
@@ -214,10 +214,10 @@ pub mod pallet {
 			let nft = Self::nfts(&nft_id).ok_or(<Error<T>>::NftNotExist)?;
 			ensure!(nft.owner != buyer, <Error<T>>::BuyerIsNftOwner);
 
-			// ACTION #6: Check if the Nft is for sale.
+			// Check if the Nft is for sale.
 			// Check the nft is for sale and the nft ask price <= bid_price
-			if let Some(ask_price) = nft.price {
-				ensure!(ask_price <= bid_price, <Error<T>>::NftBidPriceTooLow);
+			if let ask_price = nft.price {
+				ensure!(ask_price <= Some(bid_price), <Error<T>>::NftBidPriceTooLow);
 			} else {
 				Err(<Error<T>>::NftNotForSale)?;
 			}
@@ -225,7 +225,7 @@ pub mod pallet {
 			// Check the buyer has enough free balance
 			ensure!(T::Currency::free_balance(&buyer) >= bid_price, <Error<T>>::NotEnoughBalance);
 
-			// ACTION #7: Check if buyer can receive Nft.
+			//  Check if buyer can receive Nft.
 			// Verify the buyer has the capacity to receive one more nft
 			let to_owned = <NftsOwned<T>>::get(&buyer);
 			ensure!(
@@ -235,7 +235,7 @@ pub mod pallet {
 
 			let seller = nft.owner.clone();
 
-			// ACTION #8: Update Balances using the Currency trait.
+			//  Update Balances using the Currency trait.
 			// Transfer the amount from buyer to seller
 			T::Currency::transfer(&buyer, &seller, bid_price, ExistenceRequirement::KeepAlive)?;
 
@@ -252,9 +252,9 @@ pub mod pallet {
 	//** Helper functions.**//
 
 	impl<T: Config> Pallet<T> {
-		// ACTION #4: helper function for Nft struct
+		// Helper function for Nft struct
 
-		// TODO Part III: helper functions for dispatchable functions
+		// Helper functions for dispatchable functions
 
 		// Helper to mint a Nft.
 		pub fn mint(
@@ -264,27 +264,27 @@ pub mod pallet {
 		) -> Result<[u8; 16], Error<T>> {
 			let nft = Nft::<T> {
 				proof: proof.clone(),
-				price: None,
+				price: None, // Not for Sale, Default Value
 				name: name.clone(),
 				owner: owner.clone(),
 			};
 
+			// Check if the nft does not already exist in our storage map
+			ensure!(Self::nfts(&nft.proof) == None, Error::<T>::NftExists);
+
 			// Performs this operation first as it may fail
 			let new_cnt =
-				Self::count_for_nfts().checked_add(1).ok_or(<Error<T>>::CountForNftsOverflow)?;
-
-			// Check if the nft does not already exist in our storage map
-			ensure!(Self::nfts(&nft.proof) == None, <Error<T>>::NftExists);
+				Self::count_for_nfts().checked_add(1).ok_or(Error::<T>::CountForNftsOverflow)?;
 
 			// Performs this operation first as it may fail
 			<NftsOwned<T>>::try_mutate(&owner, |nft_vec| nft_vec.try_push(nft.proof))
-				.map_err(|_| <Error<T>>::ExceedMaxNftsOwned)?;
+				.map_err(|_| Error::<T>::ExceedMaxNftsOwned)?;
 
 			// Get the block number from the FRAME System pallet.
 			let current_block = <frame_system::Pallet<T>>::block_number();
 
-			<Nfts<T>>::insert(nft.proof, nft);
-			<CountForNfts<T>>::put(new_cnt);
+			Nfts::<T>::insert(nft.proof, nft);
+			CountForNfts::<T>::put(new_cnt);
 			Ok(proof)
 		}
 
@@ -306,7 +306,7 @@ pub mod pallet {
 			<NftsOwned<T>>::try_mutate(&prev_owner, |owned| {
 				if let Some(ind) = owned.iter().position(|&id| id == *nft_id) {
 					owned.swap_remove(ind);
-					return Ok(());
+					return Ok(())
 				}
 				Err(())
 			})

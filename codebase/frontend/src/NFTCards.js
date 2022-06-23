@@ -177,7 +177,7 @@ const BuyNFT = props => {
           onClick={confirmAndClose}
           attrs={{
             palletRpc: 'substrateNfts',
-            callable: 'buyNFT',
+            callable: 'buyNft',
             inputParams: [nft.proof, nft.price],
             paramFields: [true, true],
           }}

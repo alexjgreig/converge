@@ -9,18 +9,23 @@ import { blake2AsHex } from '@polkadot/util-crypto'
 
 import NftCards from './NftCards'
 
-// Construct a Kitty ID from storage key
-const convertToNftHash = entry =>
-  `0x${entry[0].toJSON().slice(-64)}`;
+const parseNft = ({ proof, price, name, owner }) => ({
+  proof,
+  price: price.JSON(), 
+  name: name.JSON(),
+  owner: owner.JSON(),
+})
 
-// Construct a Kitty object 
-const constructNft = (hash, { dna, price, gender, owner }) => ({
-  id: hash,
-  dna,
-  price: price.toJSON(),
-  gender: gender.toJSON(),
-  owner: owner.toJSON()
-});
+// Construct a Nft ID from storage key
+function toHexString(byteArray) {
+  var s = '0x'
+  byteArray.forEach(function (byte) {
+    s += ('0' + (byte & 0xff).toString(16)).slice(-2)
+  })
+  return s
+}
+// Construct a Nft object 
+
 
 function hexToBytes(hex) {
     for (var bytes = [], c = 0; c < hex.length; c += 2) {
@@ -43,8 +48,7 @@ return bytes.slice(0,16);
 
 export default function Nfts(props) {
   const { api, keyring } = useSubstrateState()
-  // const { accountPair } = props;
-  const [nftHashes, setNftHashes] = useState([])
+  const [nftIds, setNftIds] = useState([])
   const [nfts, setNfts] = useState([])
   const [status, setStatus] = useState('')
   const [digest, setDigest] = useState([])
@@ -60,8 +64,9 @@ const subscribeCount = () => {
       async count => {
         // Fetch all nft keys
         const entries = await api.query.substrateNfts.nfts.entries()
-        const hashes = entries.map(convertToNftHash)
-        setNftHashes(hashes)
+        const ids = entries.map(entry => toHexString(entry[0].slice(-32)))
+        setNftIds(ids)
+	console.log(ids)
       }
     )
   }
@@ -78,10 +83,10 @@ const subscribeNfts = () => {
 
   const asyncFetch = async () => {
     unsub = await api.query.substrateNfts.nfts.multi(
-      nftHashes,
-      nfts => {
-	const nftsArr = nfts.map((nft,ind) => constructNft(nftHashes[ind], nft.value));
-        setNfts(nftsArr);
+      nftIds,
+      (nfts) => {
+	const nftsMap = nfts.map(nft => parseNft(nft.unwrap()));
+        setNfts(nftsMap);
       }
     )
   }
@@ -92,6 +97,9 @@ const subscribeNfts = () => {
     unsub && unsub()
   }
 }
+
+useEffect(subscribeCount, [api, keyring])
+useEffect(subscribeNfts, [api, keyring, nftIds])
 // Our `FileReader()` which is accessible from our functions below.
   let fileReader;
   // Takes our file, and creates a digest using the Blake2 256 hash function
@@ -118,8 +126,6 @@ while (array.length < 16) {
 
 const handleChange = event => {setName(event.target.value)}
 
-useEffect(subscribeCount, [api, keyring])
-useEffect(subscribeNfts, [api, keyring, nftHashes])
 
 return (
 
