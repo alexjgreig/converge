@@ -587,6 +587,8 @@ INPUT /usr/share/texlive/texmf-dist/fonts/vf/adobe/courier/pcrr8t.vf
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/adobe/courier/pcrr8r.tfm
 INPUT chapters/chapter8.tex
 INPUT chapters/chapter8.tex
+INPUT chapters/chapter9.tex
+INPUT chapters/chapter9.tex
 OUTPUT Converge.toc
 INPUT Converge.aux
 INPUT ./Converge.out
