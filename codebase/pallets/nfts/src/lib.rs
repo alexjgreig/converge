@@ -24,10 +24,10 @@ pub mod pallet {
 	#[scale_info(skip_type_params(T))]
 	#[codec(mel_bound())]
 	pub struct Nft<T: Config> {
-		pub price: Option<BalanceOf<T>>, // None assumes that the Nft is not for sale.
-		pub owner: AccountOf<T>,
 		pub proof: [u8; 16],
+		pub price: Option<BalanceOf<T>>, // None assumes that the Nft is not for sale.
 		pub name: [u8; 16],
+		pub owner: AccountOf<T>,
 	}
 
 	#[pallet::pallet]
@@ -137,11 +137,11 @@ pub mod pallet {
 
 	#[pallet::call]
 	impl<T: Config> Pallet<T> {
-		#[pallet::weight(1_000_000_000)]
+		#[pallet::weight(10_000)]
 		pub fn create_nft(origin: OriginFor<T>, proof: [u8; 16], name: [u8; 16]) -> DispatchResult {
 			let sender = ensure_signed(origin)?;
 
-			ensure!((name[0] + name[1] + name[2]) != 0, Error::<T>::NameTooShort);
+			ensure!(name[2] != 0, Error::<T>::NameTooShort);
 
 			let nft_id = Self::mint(&sender, proof.clone(), name.clone())?;
 
@@ -151,7 +151,7 @@ pub mod pallet {
 		}
 
 		/// Set the price for a nft.
-		#[pallet::weight(1_000_000_000)]
+		#[pallet::weight(10_000)]
 		pub fn set_price(
 			origin: OriginFor<T>,
 			nft_id: [u8; 16],
@@ -173,7 +173,7 @@ pub mod pallet {
 			Ok(())
 		}
 
-		#[pallet::weight(1_000_000_000)]
+		#[pallet::weight(10_000)]
 		pub fn transfer(
 			origin: OriginFor<T>,
 			to: T::AccountId,
@@ -202,7 +202,7 @@ pub mod pallet {
 		}
 
 		// buy_nft
-		#[pallet::weight(1_000_000_000)]
+		#[pallet::weight(10_000)]
 		pub fn buy_nft(
 			origin: OriginFor<T>,
 			nft_id: [u8; 16],
@@ -263,10 +263,10 @@ pub mod pallet {
 			name: [u8; 16],
 		) -> Result<[u8; 16], Error<T>> {
 			let nft = Nft::<T> {
-				price: None,
-				owner: owner.clone(),
 				proof: proof.clone(),
+				price: None,
 				name: name.clone(),
+				owner: owner.clone(),
 			};
 
 			// Performs this operation first as it may fail
@@ -306,7 +306,7 @@ pub mod pallet {
 			<NftsOwned<T>>::try_mutate(&prev_owner, |owned| {
 				if let Some(ind) = owned.iter().position(|&id| id == *nft_id) {
 					owned.swap_remove(ind);
-					return Ok(())
+					return Ok(());
 				}
 				Err(())
 			})

@@ -7,6 +7,7 @@ import {
   Modal,
   Form,
   Image,
+  Label,
 } from 'semantic-ui-react'
 
 import { useSubstrateState } from './substrate-lib'
@@ -190,12 +191,18 @@ const BuyNFT = props => {
 
 const NFTCard = props => {
   const { nft, setStatus } = props
-  const { owner = null, price = null, proof = null, name=null} = nft
-  const { currentAccount } = useSubstrateState()
+  const { proof = null, owner = null, name = null, price = null} = nft
   const displayProof = proof && proof.toJSON()
+  const { currentAccount } = useSubstrateState()
+  const isSelf = currentAccount.address === nft.owner
 
   return (
     <Card>
+	{isSelf && (
+        <Label as="a" floating color="teal">
+          Mine
+        </Label>
+      )}
       <Image src='/img/doc.png' wrapped ui ={false} />
       <Card.Content>
 	 <Card.Meta style={{ fontSize: '.9em', overflowWrap: 'break-word' }}>

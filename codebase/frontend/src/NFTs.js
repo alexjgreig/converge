@@ -9,11 +9,18 @@ import { blake2AsHex } from '@polkadot/util-crypto'
 
 import NftCards from './NftCards'
 
-const parseNft = ({ price, owner, proof }) => ({
+// Construct a Kitty ID from storage key
+const convertToNftHash = entry =>
+  `0x${entry[0].toJSON().slice(-64)}`;
+
+// Construct a Kitty object 
+const constructNft = (hash, { dna, price, gender, owner }) => ({
+  id: hash,
+  dna,
   price: price.toJSON(),
-  owner: owner.toJSON(),
-  proof,
-})
+  gender: gender.toJSON(),
+  owner: owner.toJSON()
+});
 
 function hexToBytes(hex) {
     for (var bytes = [], c = 0; c < hex.length; c += 2) {
@@ -22,44 +29,44 @@ function hexToBytes(hex) {
     return bytes;
 }
 
-function toHexString(byteArray) {
-  var s = '0x'
-  byteArray.forEach(function (byte) {
-    s += ('0' + (byte & 0xff).toString(16)).slice(-2)
-  })
-  return s
-}
 
 function stringToBytes(str) {
 var buffer = new Buffer(str, 'utf16le');
 for (var bytes = [], i = 0; i < buffer.length; i++) {
     bytes.push(buffer[i]);
 }
-return bytes.slice(0,15);
+while (bytes.length < 16) {
+    bytes.push(0);
+  }
+return bytes.slice(0,16);
 }
+
 export default function Nfts(props) {
   const { api, keyring } = useSubstrateState()
-  const [nftIds, setNftIds] = useState([])
+  // const { accountPair } = props;
+  const [nftHashes, setNftHashes] = useState([])
   const [nfts, setNfts] = useState([])
   const [status, setStatus] = useState('')
   const [digest, setDigest] = useState([])
-  const [name, setName] = useState("")
+  const [name, setName] = useState('')
 
 
 // Subscription function for nft count
 const subscribeCount = () => {
   let unsub = null
+
   const asyncFetch = async () => {
     unsub = await api.query.substrateNfts.countForNfts(
       async count => {
         // Fetch all nft keys
         const entries = await api.query.substrateNfts.nfts.entries()
-        const ids = entries.map(entry => toHexString(entry[0].slice(-32)))
-        setNftIds(ids)
+        const hashes = entries.map(convertToNftHash)
+        setNftHashes(hashes)
       }
     )
   }
   asyncFetch()
+
   return () => {
     unsub && unsub()
   }
@@ -68,16 +75,19 @@ const subscribeCount = () => {
 // Subscription function to construct all nft objects
 const subscribeNfts = () => {
   let unsub = null
+
   const asyncFetch = async () => {
     unsub = await api.query.substrateNfts.nfts.multi(
-      nftIds,
+      nftHashes,
       nfts => {
-        const nftsMap = nfts.map(nft => parseNft(nft.unwrap()))
-        setNfts(nftsMap)
+	const nftsArr = nfts.map((nft,ind) => constructNft(nftHashes[ind], nft.value));
+        setNfts(nftsArr);
       }
     )
   }
+
   asyncFetch()
+
   return () => {
     unsub && unsub()
   }
@@ -90,9 +100,13 @@ const subscribeNfts = () => {
     const content = Array.from(new Uint8Array(fileReader.result))
       .map(b => b.toString(16).padStart(2, '0'))
       .join('');
-    const hash = blake2AsHex(content, 16);
-    const array = hexToBytes(hash).slice(0,15)
-    setDigest(array);
+    const hash = blake2AsHex(content, 256);
+    const array = hexToBytes(hash); 
+
+while (array.length < 16) {
+    array.push(0);
+  }
+    setDigest(array.slice(0,16));
   };
 
   // Callback function for when a new file is selected.
@@ -102,10 +116,10 @@ const subscribeNfts = () => {
     fileReader.readAsArrayBuffer(file);
   };
 
- const handleChange = (e, value) => {setName(value)}
+const handleChange = event => {setName(event.target.value)}
 
 useEffect(subscribeCount, [api, keyring])
-useEffect(subscribeNfts, [api, keyring, nftIds])
+useEffect(subscribeNfts, [api, keyring, nftHashes])
 
 return (
 
@@ -126,8 +140,7 @@ return (
               placeholder='Name of Fungible Asset'
               fluid
               type="text"
-		value={name}
-		
+	      value={name}	
               onChange={handleChange}
             />
 	</Form.Field>

@@ -21,7 +21,7 @@ import Metadata from './Metadata'
 import NodeInfo from './NodeInfo'
 import Transfer from './Transfer'
 import Upgrade from './Upgrade'
-import Nft from './Nfts'
+import Nfts from './Nfts'
 // import Assets from './Assets'
 
 function Main() {
@@ -84,7 +84,7 @@ function Main() {
           </Grid.Row>
           <Grid.Row>
 	  {/*<Assets />*/}
-  	    <Nft />
+  	    <Nfts />
           </Grid.Row>
         </Grid>
       </Container>
